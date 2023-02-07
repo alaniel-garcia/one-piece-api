@@ -116,5 +116,8 @@
     "jest.config.ts",
     "build",
     "coverage",
+    "**/*.test.*",
+    "**/__mocks__/*",
+    "**/__tests__/*"
   ],
 }

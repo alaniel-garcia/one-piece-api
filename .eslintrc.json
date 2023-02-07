@@ -8,13 +8,28 @@
     "standard-with-typescript",
     "plugin:prettier/recommended",
     "eslint:recommended",
-    "plugin:@typescript-eslint/recommended"
+    "plugin:@typescript-eslint/recommended",
+    "plugin:import/recommended",
+    "plugin:import/typescript"
   ],
-  "plugins": [
-    "@typescrpit-eslint",
-    "import",
-    "prettier"
-  ],
+  "plugins": ["@typescript-eslint", "import", "prettier"],
+  "settings": {
+    "import/parsers": {
+      "@typescript-eslint/parser": [".ts"]
+      // "@typescript-eslint/parser": [".ts", ".tsx"] // for when working on frontend
+    },
+    "import/resolver": {
+      "typescript": {
+        "alwaysTryTypes": true,
+        "project": ["./tsconfig.json"]
+        //"project": "packages/*/tsconfig.json"     //estructure for Monorepos
+      },
+      "node": {
+        "extensions": [".js", ".ts"]
+        // "extensions": [".js", ".jsx", ".ts", ".tsx"] // for when working on frontend
+      }
+    }
+  },
   "overrides": [],
   "parserOptions": {
     "ecmaVersion": "latest",
@@ -23,21 +38,14 @@
   },
   "rules": {
     "prettier/prettier": "error",
-    "import/no-unresolved": [
-      "error",
-      {
-        "plugins": [
-          "module-resolve",
-          {
-            "alias": {
-              "@utils": "./src/utils",
-              "@routes": "./src/routes"
-            }
-          }
-        ]
-      }
-    ]
+    "import/no-unresolved": "error"
     // "semi": [2, "always"],
     // "@typescript-eslint/semi": "off"
-  }
+  },
+  "ignorePatterns":[
+    "**/*.json",
+    "**/*.config.js",
+    "**/*.config.ts",
+    "build"
+  ]
 }

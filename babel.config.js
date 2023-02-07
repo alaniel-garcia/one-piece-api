@@ -14,7 +14,7 @@ module.exports = {
     [
       'module-resolver',
       {
-        root : ['./'],
+        root: ['./'],
         alias: {
           '@utils': './src/utils',
           '@routes': './src/routes'
@@ -23,4 +23,4 @@ module.exports = {
     ]
   ],
   ignore: ['**/*.spec.ts']
-}
+};
