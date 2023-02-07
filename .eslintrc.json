@@ -1,0 +1,43 @@
+{
+  "env": {
+    "es6": true,
+    "node": true,
+    "jest": true
+  },
+  "extends": [
+    "standard-with-typescript",
+    "plugin:prettier/recommended",
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended"
+  ],
+  "plugins": [
+    "@typescrpit-eslint",
+    "import",
+    "prettier"
+  ],
+  "overrides": [],
+  "parserOptions": {
+    "ecmaVersion": "latest",
+    "sourceType": "module",
+    "project": "./tsconfig.json"
+  },
+  "rules": {
+    "prettier/prettier": "error",
+    "import/no-unresolved": [
+      "error",
+      {
+        "plugins": [
+          "module-resolve",
+          {
+            "alias": {
+              "@utils": "./src/utils",
+              "@routes": "./src/routes"
+            }
+          }
+        ]
+      }
+    ]
+    // "semi": [2, "always"],
+    // "@typescript-eslint/semi": "off"
+  }
+}
