@@ -27,16 +27,19 @@
     "module": "CommonJS",                                /* Specify what module code is generated. */
     // "rootDir": "./src",                                  /* Specify the root folder within your source files. */
     "moduleResolution": "node",                       /* Specify how TypeScript looks up a file from a given module specifier. */
-    "baseUrl": ".",                                  /* Specify the base directory to resolve non-relative module names. */
+    "baseUrl": "./src",                                  /* Specify the base directory to resolve non-relative module names. */
     "paths": {
-      "@utils/*": ["./src/utils/*"],
-      "@routes/*": ["./src/routes/*"]
+      "@utils/*": ["utils/*"],
+      "@routes/*": ["routes/*"],
+      "@services/*": ["services/*"],
+      "@models/*": ["models/*"]
     },                                      /* Specify a set of entries that re-map imports to additional lookup locations. */
     // "rootDirs": [],                                   /* Allow multiple folders to be treated as one when resolving modules. */
     "typeRoots": ["./node_modules/@types"],                                  /* Specify multiple folders that act like `./node_modules/@types`. */
     "types": [
       "node",
-      "jest"
+      "jest",
+      "express"
       ],                                      /* Specify type package names to be included without being referenced in a source file. */
     // "allowUmdGlobalAccess": true,                     /* Allow accessing UMD globals from modules. */
     "resolveJsonModule": true,                        /* Enable importing .json files */
@@ -90,9 +93,9 @@
     // "useUnknownInCatchVariables": true,               /* Type catch clause variables as 'unknown' instead of 'any'. */
     // "alwaysStrict": true,                             /* Ensure 'use strict' is always emitted. */
     // "noUnusedLocals": true,                           /* Enable error reporting when a local variables aren't read. */
-    // "noUnusedParameters": true,                       /* Raise an error when a function parameter isn't read */
+    "noUnusedParameters": true,                       /* Raise an error when a function parameter isn't read */
     // "exactOptionalPropertyTypes": true,               /* Interpret optional property types as written, rather than adding 'undefined'. */
-    // "noImplicitReturns": true,                        /* Enable error reporting for codepaths that do not explicitly return in a function. */
+    "noImplicitReturns": true,                        /* Enable error reporting for codepaths that do not explicitly return in a function. */
     "noFallthroughCasesInSwitch": true,               /* Enable error reporting for fallthrough cases in switch statements. */
     // "noUncheckedIndexedAccess": true,                 /* Include 'undefined' in index signature results */
     // "noImplicitOverride": true,                       /* Ensure overriding members in derived classes are marked with an override modifier. */
@@ -102,7 +105,8 @@
 
     /* Completeness */
     // "skipDefaultLibCheck": true,                      /* Skip type checking .d.ts files that are included with TypeScript. */
-    "skipLibCheck": true                                 /* Skip type checking all .d.ts files. */
+    "skipLibCheck": true,                                 /* Skip type checking all .d.ts files. */
+    "noErrorTruncation": true
   },
   "ts-node": {                                           // Especifies what/how is goin to happen when ts-node is executed
     "require": ["tsconfig-paths/register"],               // Require for resolving absolute paths correctly
@@ -115,9 +119,10 @@
     "node-modules",
     "jest.config.ts",
     "build",
+    "_sources",
     "coverage",
-    "**/*.test.*",
-    "**/__mocks__/*",
-    "**/__tests__/*"
+    // "**/*.test.*",
+    // "**/__mocks__/*",
+    // "**/__tests__/*"
   ],
 }

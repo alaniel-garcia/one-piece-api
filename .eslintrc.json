@@ -38,9 +38,48 @@
   },
   "rules": {
     "prettier/prettier": "error",
-    "import/no-unresolved": "error"
-    // "semi": [2, "always"],
-    // "@typescript-eslint/semi": "off"
+    "import/no-unresolved": "error",
+    "import/no-named-as-default-member": 0,
+    "@typescript-eslint/array-type": ["error", { "default": "generic" }],
+    "semi": "off",
+    "no-unused-vars": "off",
+    "@typescript-eslint/no-unused-vars": "error",
+    "@typescript-eslint/semi": "off",
+    "@typescript-eslint/naming-convention": ["error", {
+      "selector": "variable",
+      "format": ["camelCase","PascalCase", "UPPER_CASE", "snake_case"]
+    }]
+    // "@typescript-eslint/member-delimiter-style": [
+    //   "warn",
+    //   {
+    //     "multiline": {
+    //         "delimiter": "semi",
+    //         "requireLast": true
+    //     },
+    //     "singleline": {
+    //         "delimiter": "semi",
+    //         "requireLast": false
+    //     },
+    //     "overrides": {
+    //       "interface": {
+    //         "multiline": {
+    //           "delimiter": "none",
+    //           "requireLast": true
+    //         }
+    //       },
+    //       "typeLiteral": {
+    //         "multiline": {
+    //           "delimiter": "none",
+    //           "requireLast": true
+    //         },
+    //         "singleline": {
+    //           "delimiter": "comma",
+    //           "requireLast": false
+    //         }
+    //       }
+    //     }
+    //   }
+    // ]
   },
   "ignorePatterns":[
     "**/*.json",
