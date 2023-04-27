@@ -1,5 +1,4 @@
 import mongoose from 'mongoose';
-import dotenv from 'dotenv';
 import {
   validateBackstory,
   validateBirthday,
@@ -19,7 +18,6 @@ import {
 } from '@utils/helpers/validations';
 import type { CharacterDocument } from 'types';
 
-dotenv.config();
 const { Schema } = mongoose;
 
 const characterSchema = new Schema(
