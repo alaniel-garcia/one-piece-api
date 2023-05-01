@@ -33,3 +33,13 @@ export interface CharacterDocument extends Document {
   backstory: string;
   image?: string;
 }
+
+export interface RaceDocument extends Document {
+  _id: number;
+  name: string;
+  description: string;
+  average_lifespan: string;
+  homeland: string;
+  history: string;
+  image?: string;
+}
