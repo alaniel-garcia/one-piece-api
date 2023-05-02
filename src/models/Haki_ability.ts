@@ -1,5 +1,10 @@
-import { validatePositiveNonZeroInteger, validateString, validateUrl } from '@utils/helpers/validations';
-import { validateHakiAbilityName, validateHakiAbilityUsers } from '@utils/helpers/validations/hakiAbilityValidations';
+import {
+  validatePositiveNonZeroInteger,
+  validateString,
+  validateSubDocsArray,
+  validateUrl
+} from '@utils/helpers/validations';
+import { validateHakiAbilityName } from '@utils/helpers/validations/hakiAbilityValidations';
 import mongoose from 'mongoose';
 import type { HakiAbilityDocument } from 'types';
 
@@ -45,7 +50,7 @@ const hakiAbilitySchema = new Schema({
         _id: false
       }
     ],
-    validate: validateHakiAbilityUsers
+    validate: validateSubDocsArray
   },
   image: {
     type: String,

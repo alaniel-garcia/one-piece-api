@@ -70,6 +70,16 @@ export function validateSubDoc(value: SubDocument): true {
   return true;
 }
 
+export function validateSubDocsArray(value: Array<SubDocument>): true {
+  if (!(Array.isArray(value) && value.length >= 1))
+    throw new Error('Argument must be an array with at least 1 element');
+
+  value.forEach((element) => validateSubDoc(element));
+
+  validateSubDocArraysDuplicity(value);
+  return true;
+}
+
 // Only validates duplicity due to every other valdiation which requires this one, has a particular need to treat other errors
 export function validateSubDocArraysDuplicity(array: Array<SubDocument>): true {
   const ids = new Set();

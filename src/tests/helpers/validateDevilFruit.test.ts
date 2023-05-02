@@ -2,7 +2,7 @@ import { validateDevilFruitName, validateDevilFruitType } from '@utils/helpers/v
 import type { DevilFruitType } from 'types';
 
 describe('Devil fruit specific validation functions', () => {
-  describe('validateDevilFruit function', () => {
+  describe('validateDevilFruitName function', () => {
     const errorMessage =
       'Devil Fruit name needs the first two words to be the same, and followed by "no Mi" examples: "Gomu Gomu no Mi", "Gura Gura no Mi", "Hito Hito no Mi, Model: Nika". Not allowed examples: "Gura gura no Mi", "Gomu no Mi", "Gomu Gomu mi no", "Mera Mera no mi"';
 
