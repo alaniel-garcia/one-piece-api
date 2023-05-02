@@ -63,3 +63,11 @@ export interface HakiAbilityDocument extends Document {
   users: Array<SubDocument>;
   image: string;
 }
+
+export interface GroupDocument extends Document {
+  _id: number;
+  name: string;
+  members: Array<SubDocument>;
+  background: string;
+  image?: string;
+}
