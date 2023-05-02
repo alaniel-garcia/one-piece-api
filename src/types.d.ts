@@ -15,7 +15,8 @@ export interface LuffyDevilFruitSubDoc extends SubDocument {
 
 export type Status = 'Alive' | 'Deceased' | 'Unknown';
 export type Race = SubDocument;
-export type HakiAbility = SubDocument & { name: 'Armament' | 'Observation' | 'Conqueror' };
+export type HakiAbility = SubDocument & { name: HakiAbilityName };
+export type HakiAbilityName = 'Armament' | 'Observation' | 'Conqueror';
 export type DevilFruitType = 'Paramecia' | 'Logia' | 'Zoan' | 'Mythical Zoan';
 
 export interface CharacterDocument extends Document {
@@ -39,7 +40,7 @@ export interface RaceDocument extends Document {
   _id: number;
   name: string;
   description: string;
-  average_lifespan: string;
+  average_lifespan?: string;
   homeland: string;
   history: string;
   image?: string;
@@ -53,4 +54,12 @@ export interface DevilFruitDocument extends Document {
   description: string;
   current_user: SubDocument;
   image?: string;
+}
+
+export interface HakiAbilityDocument extends Document {
+  _id: number;
+  name: string;
+  description: string;
+  users: Array<SubDocument>;
+  image: string;
 }
