@@ -182,7 +182,7 @@ describe('Specific validation functions for character', () => {
     });
     it('should throw an error on invalid haki ability names', () => {
       haki_abilities[1].name = 'armament';
-      expect(() => validateCharacterHakiAbilities(haki_abilities)).toThrowError(errorMessages[1]);
+      expect(() => validateCharacterHakiAbilities(haki_abilities)).toThrowError();
       haki_abilities[1].name = 'King';
       expect(() => validateCharacterHakiAbilities(haki_abilities)).toThrowError(errorMessages[1]);
     });

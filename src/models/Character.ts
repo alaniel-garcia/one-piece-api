@@ -84,9 +84,7 @@ const characterSchema = new Schema(
           id: {
             type: Number,
             required: true,
-            validate: {
-              validator: Number.isInteger
-            }
+            validate: validatePositiveNonZeroInteger
           },
           name: {
             type: String,

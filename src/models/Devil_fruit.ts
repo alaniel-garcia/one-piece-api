@@ -1,11 +1,10 @@
 import {
-  validateDevilFruitName,
   validatePositiveNonZeroInteger,
   validateString,
   validateSubDoc,
   validateUrl
 } from '@utils/helpers/validations';
-import { validateDevilFruitType } from '@utils/helpers/validations/devilFruitValidations';
+import { validateDevilFruitName, validateDevilFruitType } from '@utils/helpers/validations/devilFruitValidations';
 import mongoose from 'mongoose';
 import type { DevilFruitDocument } from 'types';
 

@@ -1,13 +1,13 @@
-import type { LuffyDevilFruitSubDoc, Status, SubDocument } from 'types';
+import type { HakiAbilityName, LuffyDevilFruitSubDoc, Status, SubDocument } from 'types';
 import {
-  validateDevilFruitName,
   validateNonEmptyString,
-  validatePositiveNonZeroInteger,
   validateString,
   validateStringArray,
   validateSubDoc,
   validateSubDocArraysDuplicity
 } from '.';
+import { validateDevilFruitName } from './devilFruitValidations';
+import { validateHakiAbilityName } from './hakiAbilityValidations';
 
 export function validateStatus(value: Status): true {
   const VALID_STATUSES = ['Alive', 'Deceased', 'Unknown'];
@@ -63,17 +63,15 @@ export function validateCharacterDevilFruit(value: LuffyDevilFruitSubDoc | SubDo
 }
 
 export function validateCharacterHakiAbilities(value: Array<SubDocument>): true {
-  const VALID_HAKI_ABILITIES = ['Armament', 'Observation', 'Conqueror'];
-
   if (!(Array.isArray(value) && value.length >= 1 && value.length <= 3))
     throw new Error('Haki abilities array must have between 1 and 3 elements');
 
-  if (!value.every(({ id, name }) => validatePositiveNonZeroInteger(id) && VALID_HAKI_ABILITIES.includes(name))) {
-    throw new Error(`Every element requires a name that can only be either ${VALID_HAKI_ABILITIES.join(', ')}`);
-  }
+  value.forEach((element) => {
+    validateSubDoc(element);
+    validateHakiAbilityName(element.name as HakiAbilityName);
+  });
 
   validateSubDocArraysDuplicity(value);
-  value.forEach((element) => validateSubDoc(element));
   return true;
 }
 
