@@ -70,3 +70,14 @@ export interface GroupDocument extends Document {
   background: string;
   image?: string;
 }
+
+export interface CrewDocument extends Document {
+  _id: number;
+  name: string;
+  captain: SubDocument;
+  flag?: string;
+  main_ship?: SubDocument;
+  members: Array<SubDocument>;
+  background: string;
+  image?: string;
+}
