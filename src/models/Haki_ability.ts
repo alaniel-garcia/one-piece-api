@@ -42,11 +42,6 @@ const hakiAbilitySchema = new Schema({
           required: true,
           validate: validateString
         },
-        url: {
-          type: String,
-          required: true,
-          validate: validateUrl
-        },
         _id: false
       }
     ],

@@ -64,9 +64,6 @@ export function validateSubDoc(value: SubDocument): true {
   if (!value.name) throw new Error(`Invalid argument: ${value}. Must have a 'name' property.`);
   validateString(value.name);
 
-  if (!value.url) throw new Error(`Invalid argument: ${value}. Must have a 'url' property.`);
-  validateUrl(value.url);
-
   return true;
 }
 
@@ -84,14 +81,12 @@ export function validateSubDocsArray(value: Array<SubDocument>): true {
 export function validateSubDocArraysDuplicity(array: Array<SubDocument>): true {
   const ids = new Set();
   const names = new Set();
-  const urls = new Set();
   for (const document of array) {
-    if (ids.has(document.id) || names.has(document.name) || urls.has(document.url)) {
+    if (ids.has(document.id) || names.has(document.name)) {
       throw new Error('Input Array must not have duplicate property values between sub documents');
     }
     ids.add(document.id);
     names.add(document.name);
-    urls.add(document.url);
   }
 
   return true;

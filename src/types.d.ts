@@ -4,7 +4,6 @@ import type { Document } from 'mongoose';
 export interface SubDocument {
   id: number;
   name: string;
-  url: string;
 }
 
 export interface LuffyDevilFruitSubDoc extends SubDocument {

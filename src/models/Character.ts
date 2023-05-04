@@ -49,10 +49,6 @@ const characterSchema = new Schema(
           type: String,
           required: true
         },
-        url: {
-          type: String,
-          required: true
-        },
         _id: false
       },
       required: true,
@@ -90,11 +86,6 @@ const characterSchema = new Schema(
             type: String,
             required: true,
             enum: ['Armament', 'Observation', 'Conqueror']
-          },
-          url: {
-            type: String,
-            required: true,
-            validate: validateUrl
           },
           _id: false
         }

@@ -54,13 +54,11 @@ describe('Specific validation functions for character', () => {
     const validSubDocs = [
       {
         id: 2,
-        name: 'Gura Gura no Mi',
-        url: 'https://www.onepieceapi.net/api/devil_fruit/2'
+        name: 'Gura Gura no Mi'
       },
       {
         id: 3,
-        name: 'Mera Mera no Mi',
-        url: 'https://www.onepieceapi.net/api/devil_fruit/3'
+        name: 'Mera Mera no Mi'
       }
     ];
 
@@ -69,8 +67,7 @@ describe('Specific validation functions for character', () => {
         luffySubDoc = {
           id: 1,
           name: 'Hito Hito no Mi, Model: Nika',
-          alias: 'Gomu Gomu no Mi',
-          url: 'https://www.onepieceapi.net/api/devil_fruit/1'
+          alias: 'Gomu Gomu no Mi'
         } as unknown as LuffyDevilFruitSubDoc;
       });
       it('should return true on valid Luffy devil fruit sub doc', () => {
@@ -90,30 +87,21 @@ describe('Specific validation functions for character', () => {
       const invalidSubDocs = [
         {
           id: 2,
-          name: 'Gura Gura no mi',
-          url: 'https://www.onepieceapi.net/api/devil_fruit/2'
+          name: 'gura Gura no mi'
         },
         {
           id: 15,
-          name: 'Gura Gura no Mi',
-          url: 'https://www.onepieceapi.net/api/noValidCollection/15'
+          name: 'Gura gura no Mi'
         },
         {
           id: 1,
-          name: 'Gura Gura no Mi',
-          url: 'https://www.onepieceapi.net/api/devil_fruit/1'
+          name: 'Gura Gura No Mi'
         },
         {
-          name: 'Gura Gura no Mi',
-          url: 'https://www.onepieceapi.net/api/devil_fruit/11'
+          name: 'Gura Gura no mi'
         },
         {
-          id: 500,
-          url: 'https://www.onepieceapi.net/api/devil_fruit/500'
-        },
-        {
-          id: 150,
-          name: 'Gura Gura no Mi'
+          id: 500
         }
       ] as Array<SubDocument>;
 
@@ -137,18 +125,15 @@ describe('Specific validation functions for character', () => {
       haki_abilities = [
         {
           id: 1,
-          name: 'Armament',
-          url: 'https://www.onepieceapi.net/api/haki_ability/1'
+          name: 'Armament'
         },
         {
           id: 2,
-          name: 'Observation',
-          url: 'https://www.onepieceapi.net/api/haki_ability/2'
+          name: 'Observation'
         },
         {
           id: 3,
-          name: 'Conqueror',
-          url: 'https://www.onepieceapi.net/api/haki_ability/3'
+          name: 'Conqueror'
         }
       ];
     });
@@ -169,8 +154,7 @@ describe('Specific validation functions for character', () => {
       expect(() => validateCharacterHakiAbilities([])).toThrowError(errorMessages[0]);
       haki_abilities.push({
         id: 3,
-        name: 'Conqueror',
-        url: 'https://www.onepieceapi.net/api/haki_ability/3'
+        name: 'Conqueror'
       });
       expect(() => validateCharacterHakiAbilities(haki_abilities)).toThrowError(errorMessages[0]);
     });
