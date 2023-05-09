@@ -5,5 +5,6 @@ import Haki_ability from './Haki_ability';
 import Group from './Group';
 import Crew from './Crew';
 import Member from './Member';
+import Ship from './Ship';
 
-export { Character, Race, Devil_fruit, Haki_ability, Group, Crew, Member };
+export { Character, Race, Devil_fruit, Haki_ability, Group, Crew, Member, Ship };

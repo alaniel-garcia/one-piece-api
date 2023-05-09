@@ -10,6 +10,12 @@ export interface Membership extends SubDocument {
   type: 'Crew' | 'Group';
 }
 
+export interface Ownership {
+  id?: number;
+  type: string;
+  name?: string;
+}
+
 export interface LuffyDevilFruitSubDoc extends SubDocument {
   id: 1;
   name: 'Hito Hito no Mi, Model: Nika';
@@ -93,4 +99,13 @@ export interface MemberDocument extends Document {
   rol: string;
   status: string;
   details: string;
+}
+
+export interface ShipDocument extends Document {
+  _id: number;
+  name: string;
+  description: string;
+  ownership: Ownership;
+  flag?: string;
+  image?: string;
 }
