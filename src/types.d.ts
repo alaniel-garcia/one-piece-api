@@ -109,3 +109,14 @@ export interface ShipDocument extends Document {
   flag?: string;
   image?: string;
 }
+
+export interface LocationDocument extends Document {
+  _id: number;
+  name: string;
+  type: string;
+  description: string;
+  population?: string;
+  government?: string;
+  history: string;
+  image: string;
+}

@@ -6,5 +6,6 @@ import Group from './Group';
 import Crew from './Crew';
 import Member from './Member';
 import Ship from './Ship';
+import Location from './Location';
 
-export { Character, Race, Devil_fruit, Haki_ability, Group, Crew, Member, Ship };
+export { Character, Race, Devil_fruit, Haki_ability, Group, Crew, Member, Ship, Location };
