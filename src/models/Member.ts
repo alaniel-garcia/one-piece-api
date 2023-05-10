@@ -67,4 +67,4 @@ const memberSchema = new Schema(
   { typeKey: '$type' }
 );
 
-export default mongoose.model<MemberDocument>('member', memberSchema);
+export default mongoose.model<MemberDocument>('Member', memberSchema);

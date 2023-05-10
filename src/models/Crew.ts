@@ -89,4 +89,4 @@ const crewSchema = new Schema({
   }
 });
 
-export default mongoose.model<CrewDocument>('crew', crewSchema);
+export default mongoose.model<CrewDocument>('Crew', crewSchema);

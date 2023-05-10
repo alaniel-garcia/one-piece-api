@@ -53,4 +53,4 @@ const groupSchema = new Schema({
   }
 });
 
-export default mongoose.model<GroupDocument>('group', groupSchema);
+export default mongoose.model<GroupDocument>('Group', groupSchema);

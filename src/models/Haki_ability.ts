@@ -55,4 +55,4 @@ const hakiAbilitySchema = new Schema({
   }
 });
 
-export default mongoose.model<HakiAbilityDocument>('haki_ability', hakiAbilitySchema);
+export default mongoose.model<HakiAbilityDocument>('Haki_ability', hakiAbilitySchema);

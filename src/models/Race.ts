@@ -43,4 +43,4 @@ const raceSchema = new Schema({
   }
 });
 
-export default mongoose.model<RaceDocument>('race', raceSchema);
+export default mongoose.model<RaceDocument>('Race', raceSchema);

@@ -49,4 +49,4 @@ const shipSchema = new Schema(
   { typeKey: '$type' }
 );
 
-export default mongoose.model<ShipDocument>('ship', shipSchema);
+export default mongoose.model<ShipDocument>('Ship', shipSchema);

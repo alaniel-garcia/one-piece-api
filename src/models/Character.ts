@@ -121,4 +121,4 @@ const characterSchema = new Schema(
   { versionKey: false }
 );
 
-export default mongoose.model<CharacterDocument>('character', characterSchema);
+export default mongoose.model<CharacterDocument>('Character', characterSchema);

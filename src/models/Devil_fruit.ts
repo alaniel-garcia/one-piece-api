@@ -10,7 +10,7 @@ import type { DevilFruitDocument } from 'types';
 
 const { Schema } = mongoose;
 
-const devilFruitDocument = new Schema({
+const devilFruitSchema = new Schema({
   _id: {
     type: Number,
     required: true,
@@ -61,4 +61,4 @@ const devilFruitDocument = new Schema({
   }
 });
 
-export default mongoose.model<DevilFruitDocument>('devil_fruit', devilFruitDocument);
+export default mongoose.model<DevilFruitDocument>('Devil_fruit', devilFruitSchema);
