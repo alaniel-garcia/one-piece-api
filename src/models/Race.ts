@@ -7,8 +7,6 @@ const { Schema } = mongoose;
 const raceSchema = new Schema({
   _id: {
     type: Number,
-    required: true,
-    unique: true,
     validate: validatePositiveNonZeroInteger
   },
   name: {
@@ -17,21 +15,12 @@ const raceSchema = new Schema({
     unique: true,
     validate: validateString
   },
-  description: {
-    type: String,
-    required: true,
-    validate: validateString
-  },
-  average_lifespan: {
-    type: String,
-    validate: validateString
-  },
   homeland: {
     type: String,
     required: true,
     validate: validateString
   },
-  history: {
+  about: {
     type: String,
     required: true,
     validate: validateString

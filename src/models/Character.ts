@@ -4,7 +4,7 @@ import {
   validateBirthday,
   validateBounties,
   validateCharacterDevilFruit,
-  validateFirstAppearance,
+  validateDebut,
   validateCharacterHakiAbilities,
   validateHeight,
   validateStatus
@@ -24,8 +24,6 @@ const characterSchema = new Schema(
   {
     _id: {
       type: Number,
-      required: true,
-      unique: true,
       validate: validatePositiveNonZeroInteger
     },
     name: {
@@ -53,6 +51,11 @@ const characterSchema = new Schema(
       },
       required: true,
       validate: validateSubDoc
+    },
+    origin: {
+      type: String,
+      required: true,
+      validate: validateString
     },
     status: {
       type: String,
@@ -101,11 +104,11 @@ const characterSchema = new Schema(
       type: String,
       validate: validateHeight
     },
-    first_appearance: {
+    debut: {
       default: undefined,
       type: [String],
       required: true,
-      validate: validateFirstAppearance
+      validate: validateDebut
     },
     backstory: {
       type: String,

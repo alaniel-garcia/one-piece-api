@@ -13,8 +13,6 @@ const { Schema } = mongoose;
 const crewSchema = new Schema({
   _id: {
     type: Number,
-    required: true,
-    unique: true,
     validate: validatePositiveNonZeroInteger
   },
   name: {

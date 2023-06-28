@@ -33,6 +33,7 @@ export interface CharacterDocument extends Document {
   name: string;
   gender: string;
   race: Race;
+  origin: string;
   status: Status;
   birthday?: string;
   main_occupations?: Array<string>;
@@ -40,7 +41,7 @@ export interface CharacterDocument extends Document {
   haki_abilities?: Array<HakiAbilities>;
   bounties?: Array<string>;
   height?: string;
-  first_appearance: Array<string>;
+  debut: Array<string>;
   backstory: string;
   image?: string;
 }
@@ -48,10 +49,8 @@ export interface CharacterDocument extends Document {
 export interface RaceDocument extends Document {
   _id: number;
   name: string;
-  description: string;
-  average_lifespan?: string;
   homeland: string;
-  history: string;
+  about: string;
   image?: string;
 }
 

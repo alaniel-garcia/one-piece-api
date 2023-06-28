@@ -12,8 +12,6 @@ const { Schema } = mongoose;
 const groupSchema = new Schema({
   _id: {
     type: Number,
-    required: true,
-    unique: true,
     validate: validatePositiveNonZeroInteger
   },
   name: {

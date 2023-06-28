@@ -9,8 +9,6 @@ const memberSchema = new Schema(
   {
     _id: {
       $type: Number,
-      required: true,
-      unique: true,
       validate: validatePositiveNonZeroInteger
     },
     character: {

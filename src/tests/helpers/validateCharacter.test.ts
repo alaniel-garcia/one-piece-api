@@ -5,7 +5,7 @@ import {
   validateCharacterHakiAbilities,
   validateBounties,
   validateHeight,
-  validateFirstAppearance,
+  validateDebut,
   validateBackstory
 } from '@utils/helpers/validations/characterValidations';
 import type { LuffyDevilFruitSubDoc, Status, SubDocument } from 'types';
@@ -215,26 +215,26 @@ describe('Specific validation functions for character', () => {
       expect(() => validateHeight('0.356')).toThrowError(errorMessages[2]);
     });
   });
-  describe('validateFirstAppearance function', () => {
+  describe('validateDebut function', () => {
     const errorMessages = [
-      'First appearance argument must be an array of two elements',
-      'First Appearance elements must follow "Episode + number" and "Chapter + number" pattern, respectively; number cannot be zero'
+      'Debut argument must be an array of two elements',
+      'Debut elements must follow "Chapter + number" and "Episode + number" pattern, respectively; number cannot be zero'
     ];
-    it('should return true on valid first appearance input', () => {
-      expect(validateFirstAppearance(['Episode 1', 'Chapter 1'])).toBe(true);
-      expect(validateFirstAppearance(['Episode 1', 'Chapter 3'])).toBe(true);
+    it('should return true on valid debut input', () => {
+      expect(validateDebut(['Chapter 1', 'Episode 1'])).toBe(true);
+      expect(validateDebut(['Chapter 3', 'Episode 1'])).toBe(true);
     });
     it('should throw error when invalid height inputs', () => {
-      expect(() => validateFirstAppearance(['episode 1', 'Chapter 1'])).toThrowError();
-      expect(() => validateFirstAppearance(['Episode 1', 'chapter 1'])).toThrowError();
-      expect(() => validateFirstAppearance(['', ''])).toThrowError();
-      expect(() => validateFirstAppearance({} as unknown as Array<string>)).toThrowError(errorMessages[0]);
-      expect(() => validateFirstAppearance(['Episode 1'])).toThrowError(errorMessages[0]);
-      expect(() => validateFirstAppearance(['Episode 1', 'Chapter 1', 'extra string'])).toThrowError(errorMessages[0]);
-      expect(() => validateFirstAppearance(['Chapter 1', 'Episode 1'])).toThrowError(errorMessages[1]);
-      expect(() => validateFirstAppearance(['Chapter 0', 'Episode 1'])).toThrowError(errorMessages[1]);
-      expect(() => validateFirstAppearance(['Chapter 1', 'Episode 0'])).toThrowError(errorMessages[1]);
-      expect(() => validateFirstAppearance(['Chapter number 1', 'Episode number 1'])).toThrowError(errorMessages[1]);
+      expect(() => validateDebut(['Chapter 1', 'episode 1'])).toThrowError();
+      expect(() => validateDebut(['chapter 1', 'Episode 1'])).toThrowError();
+      expect(() => validateDebut(['', ''])).toThrowError();
+      expect(() => validateDebut({} as unknown as Array<string>)).toThrowError(errorMessages[0]);
+      expect(() => validateDebut(['Chapter 1'])).toThrowError(errorMessages[0]);
+      expect(() => validateDebut(['Chapter 1', 'Episode 1', 'extra string'])).toThrowError(errorMessages[0]);
+      expect(() => validateDebut(['Episode 1', 'Chapter 1'])).toThrowError(errorMessages[1]);
+      expect(() => validateDebut(['Episode 1', 'Chapter 0'])).toThrowError(errorMessages[1]);
+      expect(() => validateDebut(['Episode 0', 'Chapter 1'])).toThrowError(errorMessages[1]);
+      expect(() => validateDebut(['Chapter number 1', 'Episode number 1'])).toThrowError(errorMessages[1]);
     });
   });
   describe('validateBackstory function', () => {

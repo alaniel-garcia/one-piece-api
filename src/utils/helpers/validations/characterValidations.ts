@@ -115,20 +115,18 @@ export function validateHeight(value: string): true {
   return true;
 }
 
-export function validateFirstAppearance(value: Array<string>): true {
+export function validateDebut(value: Array<string>): true {
   const ALPHABET = /^[A-Za-z]/;
-  if (!Array.isArray(value) || value.length !== 2)
-    throw new Error('First appearance argument must be an array of two elements');
+  if (!Array.isArray(value) || value.length !== 2) throw new Error('Debut argument must be an array of two elements');
 
   validateStringArray(value);
 
   // test the regex instead of use validadNonEmptyString function in order to validate no numbers at the beginning of each element
-  if (!(ALPHABET.test(value[0]) && ALPHABET.test(value[1])))
-    throw new Error('Both first appearance elements must be strings');
+  if (!(ALPHABET.test(value[0]) && ALPHABET.test(value[1]))) throw new Error('Both debut elements must be strings');
 
-  if (!(/^(Episode)\s(?!0)\d+$/i.test(value[0]) && /^(Chapter)\s(?!0)\d+$/i.test(value[1]))) {
+  if (!(/^(Episode)\s(?!0)\d+$/i.test(value[1]) && /^(Chapter)\s(?!0)\d+$/i.test(value[0]))) {
     throw new Error(
-      'First Appearance elements must follow "Episode + number" and "Chapter + number" pattern, respectively; number cannot be zero'
+      'Debut elements must follow "Chapter + number" and "Episode + number" pattern, respectively; number cannot be zero'
     );
   }
 
@@ -140,7 +138,7 @@ export function validateBackstory(value: string): true {
 
   const words = value.split(' ');
 
-  if (!(words.length >= 160 && words.length <= 230))
-    throw new Error(`Invalid backstory length. Must be between 160 and 230 words. Received: ${words.length}`);
+  if (!(words.length >= 50 && words.length <= 230))
+    throw new Error(`Invalid backstory length. Must be between 50 and 230 words. Received: ${words.length}`);
   return true;
 }
