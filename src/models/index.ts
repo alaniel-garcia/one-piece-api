@@ -7,5 +7,18 @@ import Crew from './Crew';
 import Member from './Member';
 import Ship from './Ship';
 import Location from './Location';
+import type { ApiModels } from 'types';
 
-export { Character, Race, Devil_fruit, Haki_ability, Group, Crew, Member, Ship, Location };
+const models: ApiModels = {
+  characters: Character,
+  races: Race,
+  devil_fruits: Devil_fruit,
+  haki_abilities: Haki_ability,
+  groups: Group,
+  crews: Crew,
+  members: Member,
+  ships: Ship,
+  locations: Location
+};
+
+export default models;

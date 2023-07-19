@@ -1,68 +1,75 @@
-import { validatePositiveNonZeroInteger, validateString, validateSubDoc } from '@utils/helpers/validations';
-import { validateMembership } from '@utils/helpers/validations/memberValidations';
-import type { MemberDocument } from 'types';
+import type { BaseMember, MemberDocument, MemberModel } from 'types';
 import mongoose from 'mongoose';
 
 const { Schema } = mongoose;
 
-const memberSchema = new Schema(
+const memberSchema = new Schema<MemberDocument, MemberModel>(
   {
-    _id: {
-      $type: Number,
-      validate: validatePositiveNonZeroInteger
-    },
+    id: Number,
     character: {
       $type: {
-        id: {
-          $type: Number,
-          required: true
-        },
-        name: {
-          $type: String,
-          required: true
-        },
-        _id: false
+        id: Number,
+        name: String,
+        image: String,
+        url: String
       },
-      required: true,
-      validate: validateSubDoc
+      _id: false
     },
     membership: {
       $type: {
-        id: {
-          $type: Number,
-          required: true
-        },
-        name: {
-          $type: String,
-          required: true
-        },
+        id: Number,
+        name: String,
         type: {
           $type: String,
-          required: true,
           enum: ['Crew', 'Group']
         },
-        _id: false
+        url: String
       },
-      required: true,
-      validate: validateMembership
+      _id: false
     },
-    rol: {
-      $type: String,
-      required: true,
-      validate: validateString
-    },
-    status: {
-      $type: String,
-      required: true,
-      validate: validateString
-    },
-    details: {
-      $type: String,
-      required: true,
-      validate: validateString
-    }
+    rol: String,
+    status: String,
+    details: String,
+    url: String,
+    created: String,
+    last_updated: String
   },
-  { typeKey: '$type' }
+  { typeKey: '$type', versionKey: false }
 );
 
-export default mongoose.model<MemberDocument>('Member', memberSchema);
+memberSchema.statics.structure = (res) => {
+  const sortSchema = ({
+    id,
+    character,
+    membership,
+    rol,
+    status,
+    details,
+    url,
+    created,
+    last_updated
+  }: MemberDocument): BaseMember => ({
+    id,
+    character,
+    membership,
+    rol,
+    status,
+    details,
+    url,
+    created,
+    last_updated
+  });
+
+  memberSchema.statics.findAndCount = async () => {
+    // implement code after
+
+    const results = '';
+    const count = 0;
+
+    return { results, count };
+  };
+
+  return Array.isArray(res) ? res.map(sortSchema) : sortSchema(res);
+};
+
+export default mongoose.model<MemberDocument, MemberModel>('Member', memberSchema);

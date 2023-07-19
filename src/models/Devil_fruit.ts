@@ -1,62 +1,69 @@
-import {
-  validatePositiveNonZeroInteger,
-  validateString,
-  validateSubDoc,
-  validateUrl
-} from '@utils/helpers/validations';
-import { validateDevilFruitName, validateDevilFruitType } from '@utils/helpers/validations/devilFruitValidations';
 import mongoose from 'mongoose';
-import type { DevilFruitDocument } from 'types';
+import type { BaseDevilFruit, DevilFruitDocument, DevilFruitModel } from 'types';
 
 const { Schema } = mongoose;
 
-const devilFruitSchema = new Schema({
-  _id: {
-    type: Number,
-    validate: validatePositiveNonZeroInteger
-  },
-  name: {
-    type: String,
-    required: true,
-    unique: true,
-    validate: validateDevilFruitName
-  },
-  type: {
-    type: String,
-    required: true,
-    enum: ['Paramecia', 'Logia', 'Zoan', 'Mythical Zoan'],
-    validate: validateDevilFruitType
-  },
-  meaning: {
-    type: String,
-    required: true,
-    validate: validateString
-  },
-  description: {
-    type: String,
-    required: true,
-    validate: validateString
-  },
-  current_user: {
+const devilFruitSchema = new Schema<DevilFruitDocument, DevilFruitModel>(
+  {
+    id: Number,
+    name: String,
     type: {
-      id: {
-        type: Number,
-        required: true
-      },
-      name: {
-        type: String,
-        required: true
+      $type: String,
+      enum: ['Paramecia', 'Logia', 'Zoan', 'Mythical Zoan']
+    },
+    meaning: String,
+    description: String,
+    current_user: {
+      $type: {
+        id: Number,
+        name: String,
+        url: String
       },
       _id: false
     },
-    required: true,
-    validate: validateSubDoc
+    image: String,
+    url: String,
+    created: String,
+    last_updated: String
   },
-  image: {
-    type: String,
-    unique: true,
-    validate: validateUrl
-  }
-});
+  { typeKey: '$type', versionKey: false }
+);
 
-export default mongoose.model<DevilFruitDocument>('Devil_fruit', devilFruitSchema);
+devilFruitSchema.statics.structure = (res) => {
+  const sortSchema = ({
+    id,
+    name,
+    type,
+    meaning,
+    description,
+    current_user,
+    image,
+    url,
+    created,
+    last_updated
+  }: DevilFruitDocument): BaseDevilFruit => ({
+    id,
+    name,
+    type,
+    meaning,
+    description,
+    current_user,
+    image,
+    url,
+    created,
+    last_updated
+  });
+
+  return Array.isArray(res) ? res.map(sortSchema) : sortSchema(res);
+};
+
+devilFruitSchema.statics.findAndCount = async () => {
+  // implement code after
+
+  const results = '';
+  const count = 0;
+
+  return { results, count };
+};
+
+export default mongoose.model<DevilFruitDocument, DevilFruitModel>('Devil_fruit', devilFruitSchema);

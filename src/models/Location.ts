@@ -1,50 +1,62 @@
-import { validatePositiveNonZeroInteger, validateString, validateUrl } from '@utils/helpers/validations';
 import mongoose from 'mongoose';
-import type { LocationDocument } from 'types';
+import type { BaseLocation, LocationDocument, LocationModel } from 'types';
 
 const { Schema } = mongoose;
-const locationSchema = new Schema(
+
+const locationSchema = new Schema<LocationDocument, LocationModel>(
   {
-    _id: {
-      $type: Number,
-      validate: validatePositiveNonZeroInteger
-    },
-    name: {
-      $type: String,
-      required: true,
-      unique: true,
-      validate: validateString
-    },
-    type: {
-      $type: String,
-      required: true,
-      validate: validateString
-    },
-    description: {
-      $type: String,
-      required: true,
-      validate: validateString
-    },
-    population: {
-      $type: String,
-      validate: validateString
-    },
-    government: {
-      $type: String,
-      validate: validateString
-    },
-    history: {
-      $type: String,
-      required: true,
-      validate: validateString
-    },
-    image: {
-      $type: String,
-      required: true,
-      validate: validateUrl
-    }
+    id: Number,
+    name: String,
+    type: String,
+    description: String,
+    population: String,
+    government: String,
+    history: String,
+    image: String,
+    url: String,
+    created: String,
+    last_updated: String
   },
-  { typeKey: '$type' }
+  { versionKey: false }
 );
 
-export default mongoose.model<LocationDocument>('Location', locationSchema);
+locationSchema.statics.structure = (res) => {
+  const sortSchema = ({
+    id,
+    name,
+    type,
+    description,
+    population,
+    government,
+    history,
+    image,
+    url,
+    created,
+    last_updated
+  }: LocationDocument): BaseLocation => ({
+    id,
+    name,
+    type,
+    description,
+    population,
+    government,
+    history,
+    image,
+    url,
+    created,
+    last_updated
+  });
+
+  locationSchema.statics.findAndCount = async () => {
+    // implement code after
+
+    const results = '';
+    const count = 0;
+
+    return { results, count };
+  };
+
+  return Array.isArray(res) ? res.map(sortSchema) : sortSchema(res);
+};
+
+export default mongoose.model<LocationDocument, LocationModel>('Location', locationSchema);

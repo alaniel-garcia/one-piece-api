@@ -1,56 +1,62 @@
-import {
-  validatePositiveNonZeroInteger,
-  validateString,
-  validateSubDocsArray,
-  validateUrl
-} from '@utils/helpers/validations';
-import { validateHakiAbilityName } from '@utils/helpers/validations/hakiAbilityValidations';
 import mongoose from 'mongoose';
-import type { HakiAbilityDocument } from 'types';
+import type { BaseHakiAbility, HakiAbilityDocument, HakiAbilityModel } from 'types';
 
 const { Schema } = mongoose;
 
-const hakiAbilitySchema = new Schema({
-  _id: {
-    type: Number,
-    validate: validatePositiveNonZeroInteger
+const hakiAbilitySchema = new Schema<HakiAbilityDocument, HakiAbilityModel>(
+  {
+    id: Number,
+    name: String,
+    description: String,
+    users: {
+      type: [
+        {
+          id: Number,
+          name: String,
+          url: String
+        }
+      ],
+      _id: false
+    },
+    image: String,
+    url: String,
+    created: String,
+    last_updated: String
   },
-  name: {
-    type: String,
-    required: true,
-    unique: true,
-    validate: validateHakiAbilityName
-  },
-  description: {
-    type: String,
-    required: true,
-    validate: validateString
-  },
-  users: {
-    default: undefined,
-    type: [
-      {
-        id: {
-          type: Number,
-          required: true,
-          validate: validatePositiveNonZeroInteger
-        },
-        name: {
-          type: String,
-          required: true,
-          validate: validateString
-        },
-        _id: false
-      }
-    ],
-    validate: validateSubDocsArray
-  },
-  image: {
-    type: String,
-    required: true,
-    unique: true,
-    validate: validateUrl
-  }
-});
+  { versionKey: false }
+);
 
-export default mongoose.model<HakiAbilityDocument>('Haki_ability', hakiAbilitySchema);
+hakiAbilitySchema.statics.structure = (res) => {
+  const sortSchema = ({
+    id,
+    name,
+    description,
+    users,
+    image,
+    url,
+    created,
+    last_updated
+  }: HakiAbilityDocument): BaseHakiAbility => ({
+    id,
+    name,
+    description,
+    users,
+    image,
+    url,
+    created,
+    last_updated
+  });
+
+  return Array.isArray(res) ? res.map(sortSchema) : sortSchema(res);
+};
+
+hakiAbilitySchema.statics.findAndCount = async () => {
+  // implement code after
+
+  const results = '';
+  const count = 0;
+
+  return { results, count };
+};
+
+export default mongoose.model<HakiAbilityDocument, HakiAbilityModel>('Haki_ability', hakiAbilitySchema);

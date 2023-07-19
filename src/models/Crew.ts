@@ -1,90 +1,84 @@
-import {
-  validatePositiveNonZeroInteger,
-  validateString,
-  validateSubDoc,
-  validateSubDocsArray,
-  validateUrl
-} from '@utils/helpers/validations';
 import mongoose from 'mongoose';
-import type { CrewDocument } from 'types';
+import type { BaseCrew, CrewDocument, CrewModel } from 'types';
 
 const { Schema } = mongoose;
 
-const crewSchema = new Schema({
-  _id: {
-    type: Number,
-    validate: validatePositiveNonZeroInteger
-  },
-  name: {
-    type: String,
-    required: true,
-    unique: true,
-    validate: validateString
-  },
-  captain: {
-    type: {
-      id: {
-        type: Number,
-        required: true
-      },
-      name: {
-        type: String,
-        required: true
+const crewSchema = new Schema<CrewDocument, CrewModel>(
+  {
+    id: Number,
+    name: String,
+    captain: {
+      type: {
+        id: Number,
+        name: String,
+        url: String
       },
       _id: false
     },
-    required: true,
-    validate: validateSubDoc
-  },
-  flag: {
-    type: String,
-    unique: true,
-    validate: validateUrl
-  },
-  main_ship: {
-    type: {
-      id: {
-        type: Number,
-        required: true
-      },
-      name: {
-        type: String,
-        required: true
+    flag: String,
+    main_ship: {
+      type: {
+        id: Number,
+        name: String,
+        url: String
       },
       _id: false
     },
-    required: true,
-    validate: validateSubDoc
+    members: {
+      type: [
+        {
+          id: Number,
+          name: String,
+          url: String
+        }
+      ],
+      _id: false
+    },
+    background: String,
+    image: String,
+    url: String,
+    created: String,
+    last_updated: String
   },
-  members: {
-    default: undefined,
-    type: [
-      {
-        id: {
-          type: Number,
-          required: true,
-          validate: validatePositiveNonZeroInteger
-        },
-        name: {
-          type: String,
-          required: true,
-          validate: validateString
-        },
-        _id: false
-      }
-    ],
-    validate: validateSubDocsArray
-  },
-  background: {
-    type: String,
-    required: true,
-    validate: validateString
-  },
-  image: {
-    type: String,
-    unique: true,
-    validate: validateUrl
-  }
-});
+  { versionKey: false }
+);
+crewSchema.statics.structure = (res) => {
+  const sortSchema = ({
+    id,
+    name,
+    captain,
+    flag,
+    main_ship,
+    members,
+    background,
+    image,
+    url,
+    created,
+    last_updated
+  }: CrewDocument): BaseCrew => ({
+    id,
+    name,
+    captain,
+    flag,
+    main_ship,
+    members,
+    background,
+    image,
+    url,
+    created,
+    last_updated
+  });
 
-export default mongoose.model<CrewDocument>('Crew', crewSchema);
+  return Array.isArray(res) ? res.map(sortSchema) : sortSchema(res);
+};
+
+crewSchema.statics.findAndCount = async () => {
+  // implement code after
+
+  const results = '';
+  const count = 0;
+
+  return { results, count };
+};
+
+export default mongoose.model<CrewDocument, CrewModel>('Crew', crewSchema);

@@ -1,54 +1,62 @@
-import {
-  validatePositiveNonZeroInteger,
-  validateString,
-  validateSubDocsArray,
-  validateUrl
-} from '@utils/helpers/validations';
 import mongoose from 'mongoose';
-import type { GroupDocument } from 'types';
+import type { BaseGroup, GroupDocument, GroupModel } from 'types';
 
 const { Schema } = mongoose;
 
-const groupSchema = new Schema({
-  _id: {
-    type: Number,
-    validate: validatePositiveNonZeroInteger
+const groupSchema = new Schema<GroupDocument, GroupModel>(
+  {
+    id: Number,
+    name: String,
+    members: {
+      type: [
+        {
+          id: Number,
+          name: String,
+          url: String
+        }
+      ],
+      _id: false
+    },
+    background: String,
+    image: String,
+    url: String,
+    created: String,
+    last_updated: String
   },
-  name: {
-    type: String,
-    required: true,
-    unique: true,
-    validate: validateString
-  },
-  members: {
-    default: undefined,
-    type: [
-      {
-        id: {
-          type: Number,
-          required: true,
-          validate: validatePositiveNonZeroInteger
-        },
-        name: {
-          type: String,
-          required: true,
-          validate: validateString
-        },
-        _id: false
-      }
-    ],
-    validate: validateSubDocsArray
-  },
-  background: {
-    type: String,
-    required: true,
-    validate: validateString
-  },
-  image: {
-    type: String,
-    unique: true,
-    validate: validateUrl
-  }
-});
+  { versionKey: false }
+);
 
-export default mongoose.model<GroupDocument>('Group', groupSchema);
+groupSchema.statics.structure = (res) => {
+  const sortSchema = ({
+    id,
+    name,
+    members,
+    background,
+    image,
+    url,
+    created,
+    last_updated
+  }: GroupDocument): BaseGroup => ({
+    id,
+    name,
+    members,
+    background,
+    image,
+    url,
+    created,
+    last_updated
+  });
+
+  return Array.isArray(res) ? res.map(sortSchema) : sortSchema(res);
+};
+
+groupSchema.statics.findAndCount = async () => {
+  // implement code after
+
+  const results = '';
+  const count = 0;
+
+  return { results, count };
+};
+
+export default mongoose.model<GroupDocument, GroupModel>('Group', groupSchema);

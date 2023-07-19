@@ -1,50 +1,66 @@
-import { validatePositiveNonZeroInteger, validateString, validateUrl } from '@utils/helpers/validations';
-import { validateOwnership } from '@utils/helpers/validations/shipValidations';
 import mongoose from 'mongoose';
-import type { ShipDocument } from 'types';
+import type { BaseShip, ShipDocument, ShipModel } from 'types';
 
 const { Schema } = mongoose;
 
-const shipSchema = new Schema(
+const shipSchema = new Schema<ShipDocument, ShipModel>(
   {
-    _id: {
-      $type: Number,
-      validate: validatePositiveNonZeroInteger
-    },
-    name: {
-      $type: String,
-      required: true,
-      unique: true,
-      validate: validateString
-    },
-    description: {
-      $type: String,
-      required: true,
-      validate: validateString
-    },
+    id: Number,
+    name: String,
+    description: String,
     ownership: {
       $type: {
         id: Number,
         type: {
-          $type: String,
-          required: true
+          $type: String
         },
         name: String,
-        _id: false
+        url: String
       },
-      required: true,
-      validate: validateOwnership
+      _id: false
     },
-    flag: {
-      $type: String,
-      validate: validateUrl
-    },
-    image: {
-      $type: String,
-      validate: validateUrl
-    }
+    flag: String,
+    image: String,
+    url: String,
+    created: String,
+    last_updated: String
   },
-  { typeKey: '$type' }
+  { typeKey: '$type', versionKey: false }
 );
 
-export default mongoose.model<ShipDocument>('Ship', shipSchema);
+shipSchema.statics.structure = (res) => {
+  const sortSchema = ({
+    id,
+    name,
+    description,
+    ownership,
+    flag,
+    image,
+    url,
+    created,
+    last_updated
+  }: ShipDocument): BaseShip => ({
+    id,
+    name,
+    description,
+    ownership,
+    flag,
+    image,
+    url,
+    created,
+    last_updated
+  });
+
+  return Array.isArray(res) ? res.map(sortSchema) : sortSchema(res);
+};
+
+shipSchema.statics.findAndCount = async () => {
+  // implement code after
+
+  const results = '';
+  const count = 0;
+
+  return { results, count };
+};
+
+export default mongoose.model<ShipDocument, ShipModel>('Ship', shipSchema);

@@ -1,127 +1,140 @@
 import mongoose from 'mongoose';
-import {
-  validateBackstory,
-  validateBirthday,
-  validateBounties,
-  validateCharacterDevilFruit,
-  validateDebut,
-  validateCharacterHakiAbilities,
-  validateHeight,
-  validateStatus
-} from '@utils/helpers/validations/characterValidations';
-import {
-  validatePositiveNonZeroInteger,
-  validateString,
-  validateStringArray,
-  validateSubDoc,
-  validateUrl
-} from '@utils/helpers/validations';
-import type { CharacterDocument } from 'types';
+import type { BaseCharacter, CharacterDocument, CharacterModel } from 'types';
+import { collectionQueries } from '@utils/helpers';
 
 const { Schema } = mongoose;
 
-const characterSchema = new Schema(
+interface CharacterQuery {
+  name?: string | RegExp;
+  gender?: string | RegExp;
+  'race.name'?: string | RegExp;
+  origin?: string | RegExp;
+  status?: string | RegExp;
+  main_occupations?: {
+    $all: Array<string | RegExp>;
+  };
+  skip?: number;
+}
+
+const characterSchema: mongoose.Schema<CharacterDocument, CharacterModel> = new Schema<
+  CharacterDocument,
+  CharacterModel
+>(
   {
-    _id: {
-      type: Number,
-      validate: validatePositiveNonZeroInteger
-    },
-    name: {
-      type: String,
-      required: true,
-      unique: true,
-      validate: validateString
-    },
-    gender: {
-      type: String,
-      required: true,
-      validate: validateString
-    },
+    id: Number,
+    name: String,
+    gender: String,
     race: {
       type: {
-        id: {
-          type: Number,
-          required: true
-        },
-        name: {
-          type: String,
-          required: true
-        },
-        _id: false
+        id: Number,
+        name: String,
+        url: String
       },
-      required: true,
-      validate: validateSubDoc
+      _id: false
     },
-    origin: {
-      type: String,
-      required: true,
-      validate: validateString
-    },
+    origin: String,
     status: {
       type: String,
-      required: true,
-      validate: validateStatus,
       enum: ['Alive', 'Deceased', 'Unknown']
     },
-    birthday: {
-      type: String,
-      validate: validateBirthday
-    },
-    main_occupations: {
-      default: undefined,
-      type: [String],
-      validate: validateStringArray
-    },
-    devil_fruit: {
-      type: Schema.Types.Mixed,
-      validate: validateCharacterDevilFruit
-    },
+    birthday: String,
+    main_occupations: [String],
+    devil_fruit: Schema.Types.Mixed,
     haki_abilities: {
-      default: undefined,
       type: [
         {
-          id: {
-            type: Number,
-            required: true,
-            validate: validatePositiveNonZeroInteger
-          },
+          id: Number,
           name: {
             type: String,
-            required: true,
             enum: ['Armament', 'Observation', 'Conqueror']
           },
-          _id: false
+          url: String
         }
       ],
-      validate: validateCharacterHakiAbilities
+      _id: false
     },
-    bounties: {
-      default: undefined,
-      type: [String],
-      validate: validateBounties
-    },
-    height: {
-      type: String,
-      validate: validateHeight
-    },
-    debut: {
-      default: undefined,
-      type: [String],
-      required: true,
-      validate: validateDebut
-    },
-    backstory: {
-      type: String,
-      required: true,
-      validate: validateBackstory
-    },
-    image: {
-      type: String,
-      unique: true,
-      validate: validateUrl
-    }
+    bounties: [String],
+    height: String,
+    debut: [String],
+    backstory: String,
+    image: String,
+    url: String,
+    created: String,
+    last_updated: String
   },
   { versionKey: false }
 );
 
-export default mongoose.model<CharacterDocument>('Character', characterSchema);
+characterSchema.statics.structure = (res) => {
+  const sortSchema = ({
+    id,
+    name,
+    gender,
+    race,
+    origin,
+    status,
+    birthday,
+    main_occupations,
+    devil_fruit,
+    haki_abilities,
+    bounties,
+    height,
+    debut,
+    backstory,
+    image,
+    url,
+    created,
+    last_updated
+  }: CharacterDocument): BaseCharacter => ({
+    id,
+    name,
+    gender,
+    race,
+    origin,
+    status,
+    birthday,
+    main_occupations,
+    devil_fruit,
+    haki_abilities,
+    bounties,
+    height,
+    debut,
+    backstory,
+    image,
+    url,
+    created,
+    last_updated
+  });
+
+  return Array.isArray(res) ? res.map(sortSchema) : sortSchema(res);
+};
+
+characterSchema.statics.findAndCount = async function ({ name, gender, race, origin, status, main_occupations, skip }) {
+  const regex = (key: string): RegExp =>
+    new RegExp(/^male/i.test(key) ? `^${key}` : key.replace(/[^\w\s]/g, '\\$&'), 'i');
+
+  const query: CharacterQuery = {};
+
+  if (name !== undefined) query.name = regex(name);
+  if (gender !== undefined) query.gender = regex(gender);
+  if (race !== undefined) {
+    query['race.name'] = regex(race);
+  }
+  if (origin !== undefined) query.origin = regex(origin);
+  if (status !== undefined) query.status = regex(status);
+  if (main_occupations !== undefined) {
+    const occupationsArray = (main_occupations as string).split(',');
+    query.main_occupations = { $all: occupationsArray.map((occ) => regex(occ)) }; // filter by ocuppation in the array
+  }
+
+  const [data, count] = await Promise.all([
+    this.find(query).sort({ _id: 1 }).select(collectionQueries.exclude).limit(collectionQueries.limit).skip(skip),
+    this.find(query).countDocuments()
+  ]);
+
+  const results = this.structure(data);
+
+  return { results, count };
+};
+
+export default mongoose.model<CharacterDocument, CharacterModel>('Character', characterSchema);
