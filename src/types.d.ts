@@ -1,9 +1,57 @@
-import type { Document } from 'mongoose';
-// mongoose schemas
+import type { Document, Model } from 'mongoose';
+import type { Request } from 'express';
+
+// API
+
+export interface ApiModels {
+  characters: CharacterModel;
+  races: RaceModel;
+  devil_fruits: DevilFruitModel;
+  haki_abilities: HakiAbilityModel;
+  groups: GroupModel;
+  crews: CrewModel;
+  members: MemberModel;
+  ships: ShipModel;
+  locations: LocationModel;
+}
+
+type HandlerType = 'find' | 'findById';
+
+type EndpointHandler = {
+  [key in HandlerType]: Array<(req, res, next) => Promise<void> | void>;
+};
+
+// Request and payload
+
+export interface CustomRequest<PayloadType = Payload> extends Request {
+  payload: PayloadType;
+}
+
+export interface RawPayload {
+  page: number;
+  count: number;
+  results: Array<any>;
+}
+
+export interface ProcessedPayload {
+  info: {
+    count: number;
+    page: string | number;
+    totalPages: number;
+    next: string;
+    prev: string;
+  };
+  results: Array<any>;
+}
+
+type Payload = RawPayload | ProcessedPayload;
+
+// Subdocs and enums
 
 export interface SubDocument {
   id: number;
   name: string;
+  url: string;
 }
 
 export interface Membership extends SubDocument {
@@ -22,14 +70,16 @@ export interface LuffyDevilFruitSubDoc extends SubDocument {
   alias: 'Gomu Gomu no Mi';
 }
 
-export type Status = 'Alive' | 'Deceased' | 'Unknown';
 export type Race = SubDocument;
 export type HakiAbility = SubDocument & { name: HakiAbilityName };
+export type Status = 'Alive' | 'Deceased' | 'Unknown';
 export type HakiAbilityName = 'Armament' | 'Observation' | 'Conqueror';
 export type DevilFruitType = 'Paramecia' | 'Logia' | 'Zoan' | 'Mythical Zoan';
 
-export interface CharacterDocument extends Document {
-  _id: number;
+// Character interfaces
+
+export interface BaseCharacter {
+  id: number;
   name: string;
   gender: string;
   race: Race;
@@ -44,44 +94,104 @@ export interface CharacterDocument extends Document {
   debut: Array<string>;
   backstory: string;
   image?: string;
+  url: string;
+  created: string;
+  last_updated: string;
 }
 
-export interface RaceDocument extends Document {
-  _id: number;
+export interface CharacterDocument extends BaseCharacter, Document {}
+
+export interface CharacterModel extends Model<CharacterDocument> {
+  structure: (res: CharacterDocument | Array<CharacterDocument>) => BaseCharacter | Array<BaseCharacter>;
+  findAndCount: (params: any) => Promise<{ results: any; count: number }>;
+}
+
+// Race interfaces
+
+export interface BaseRace {
+  id: number;
   name: string;
   homeland: string;
   about: string;
   image?: string;
+  url: string;
+  created: string;
+  last_updated: string;
 }
 
-export interface DevilFruitDocument extends Document {
-  _id: number;
+export interface RaceDocument extends BaseRace, Document {}
+
+export interface RaceModel extends Model<RaceDocument> {
+  structure: (res: RaceDocument | Array<RaceDocument>) => BaseRace | Array<BaseRace>;
+  findAndCount: (params: any) => Promise<{ results: any; count: number }>;
+}
+
+// Devil Fruit interfaces
+
+export interface BaseDevilFruit {
+  id: number;
   name: string;
   type: DevilFruitType;
   meaning: string;
   description: string;
   current_user: SubDocument;
   image?: string;
+  url: string;
+  created: string;
+  last_updated: string;
 }
 
-export interface HakiAbilityDocument extends Document {
-  _id: number;
+export interface DevilFruitDocument extends BaseDevilFruit, Document {}
+
+export interface DevilFruitModel extends Model<DevilFruitDocument> {
+  structure: (res: DevilFruitDocument | Array<DevilFruitDocument>) => BaseDevilFruit | Array<BaseDevilFruit>;
+  findAndCount: (params: any) => Promise<{ results: any; count: number }>;
+}
+
+// Haki Ability interfaces
+
+export interface BaseHakiAbility {
+  id: number;
   name: string;
   description: string;
   users: Array<SubDocument>;
   image: string;
+  url: string;
+  created: string;
+  last_updated: string;
 }
 
-export interface GroupDocument extends Document {
-  _id: number;
+export interface HakiAbilityDocument extends BaseHakiAbility, Document {}
+
+export interface HakiAbilityModel extends Model<HakiAbilityDocument> {
+  structure: (res: HakiAbilityDocument | Array<HakiAbilityDocument>) => BaseHakiAbility | Array<BaseHakiAbility>;
+  findAndCount: (params: any) => Promise<{ results: any; count: number }>;
+}
+
+// Group interfaces
+
+export interface BaseGroup {
+  id: number;
   name: string;
   members: Array<SubDocument>;
   background: string;
   image?: string;
+  url: string;
+  created: string;
+  last_updated: string;
 }
 
-export interface CrewDocument extends Document {
-  _id: number;
+export interface GroupDocument extends BaseGroup, Document {}
+
+export interface GroupModel extends Model<GroupDocument> {
+  structure: (res: GroupDocument | Array<GroupDocument>) => BaseGroup | Array<BaseGroup>;
+  findAndCount: (params: any) => Promise<{ results: any; count: number }>;
+}
+
+// Crew interfaces
+
+export interface BaseCrew {
+  id: number;
   name: string;
   captain: SubDocument;
   flag?: string;
@@ -89,28 +199,64 @@ export interface CrewDocument extends Document {
   members: Array<SubDocument>;
   background: string;
   image?: string;
+  url: string;
+  created: string;
+  last_updated: string;
 }
 
-export interface MemberDocument extends Document {
-  _id: number;
-  character: SubDocument;
+export interface CrewDocument extends BaseCrew, Document {}
+
+export interface CrewModel extends Model<CrewDocument> {
+  structure: (res: CrewDocument | Array<CrewDocument>) => BaseCrew | Array<BaseCrew>;
+  findAndCount: (params: any) => Promise<{ results: any; count: number }>;
+}
+
+// Member interfaces
+
+export interface BaseMember {
+  id: number;
+  character: SubDocument & { image?: string };
   membership: Membership;
   rol: string;
   status: string;
   details: string;
+  url: string;
+  created: string;
+  last_updated: string;
 }
 
-export interface ShipDocument extends Document {
-  _id: number;
+export interface MemberDocument extends BaseMember, Document {}
+
+export interface MemberModel extends Model<MemberDocument> {
+  structure: (res: MemberDocument | Array<MemberDocument>) => BaseMember | Array<BaseMember>;
+  findAndCount: (params: any) => Promise<{ results: any; count: number }>;
+}
+
+// Ship interfaces
+
+export interface BaseShip {
+  id: number;
   name: string;
   description: string;
   ownership: Ownership;
   flag?: string;
   image?: string;
+  url: string;
+  created: string;
+  last_updated: string;
 }
 
-export interface LocationDocument extends Document {
-  _id: number;
+export interface ShipDocument extends BaseShip, Document {}
+
+export interface ShipModel extends Model<ShipDocument> {
+  structure: (res: ShipDocument | Array<ShipDocument>) => BaseShip | Array<BaseShip>;
+  findAndCount: (params: any) => Promise<{ results: any; count: number }>;
+}
+
+// Location interfaces
+
+export interface BaseLocation {
+  id: number;
   name: string;
   type: string;
   description: string;
@@ -118,4 +264,14 @@ export interface LocationDocument extends Document {
   government?: string;
   history: string;
   image: string;
+  url: string;
+  created: string;
+  last_updated: string;
+}
+
+export interface LocationDocument extends BaseLocation, Document {}
+
+export interface LocationModel extends Model<LocationDocument> {
+  structure: (res: LocationDocument | Array<LocationDocument>) => BaseLocation | Array<BaseLocation>;
+  findAndCount: (params: any) => Promise<{ results: any; count: number }>;
 }
