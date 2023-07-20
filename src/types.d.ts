@@ -15,6 +15,17 @@ export interface ApiModels {
   locations: LocationModel;
 }
 
+export type ApiDocument =
+  | BaseCharacter
+  | BaseRace
+  | BaseDevilFruit
+  | BaseHakiAbility
+  | BaseGroup
+  | BaseCrew
+  | BaseMember
+  | BaseShip
+  | BaseLocation;
+
 type HandlerType = 'find' | 'findById';
 
 type EndpointHandler = {

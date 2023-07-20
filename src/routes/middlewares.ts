@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/consistent-indexed-object-style */
 import { getAll } from 'controllers/operations';
-import type { CustomRequest, EndpointHandler, ProcessedPayload } from 'types';
+import type { ApiDocument, CustomRequest, EndpointHandler, ProcessedPayload } from 'types';
 import type { NextFunction, Response } from 'express';
 import { BASE_URL, collectionQueries, message, turnPathIntoModel } from '@utils/helpers';
 import { type ValidationChain, query } from 'express-validator';
@@ -42,7 +42,7 @@ function checkSanitization(req: CustomRequest, _res: Response, next: NextFunctio
 function generatePageUrls(req: CustomRequest, res: Response, next: NextFunction): void {
   let page: string | number;
   let count: number;
-  let results: Array<any>;
+  let results: Array<ApiDocument>;
 
   // ended up narrowing payload types in order to use RawPayload first and then ProcessedPayload
   if (!('info' in req.payload)) {
