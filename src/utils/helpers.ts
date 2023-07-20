@@ -6,31 +6,60 @@ interface CollQuery {
   limit: number;
   queries: {
     [key: string]: Array<string>;
-    characters: Array<string>;
-    races: Array<string>;
-    devil_fruits: Array<string>;
-    haki_abilities: Array<string>;
-    groups: Array<string>;
-    crews: Array<string>;
-    members: Array<string>;
-    ships: Array<string>;
-    locations: Array<string>;
+    character: Array<string>;
+    race: Array<string>;
+    devil_fruit: Array<string>;
+    haki_ability: Array<string>;
+    group: Array<string>;
+    crew: Array<string>;
+    member: Array<string>;
+    ship: Array<string>;
+    location: Array<string>;
   };
+}
+
+interface PathsToModels {
+  [key: string]: string;
+  characters: 'character';
+  races: 'race';
+  devil_fruits: 'devil_fruit';
+  haki_abilities: 'haki_ability';
+  groups: 'group';
+  crews: 'crew';
+  members: 'member';
+  ships: 'ship';
+  locations: 'location';
+}
+
+// function that receives a path(which is plural), and turn it into a model, in order to use query params as key for models calling
+export function turnPathIntoModel(path: string): string {
+  const referencePaths: PathsToModels = {
+    characters: 'character',
+    races: 'race',
+    devil_fruits: 'devil_fruit',
+    haki_abilities: 'haki_ability',
+    groups: 'group',
+    crews: 'crew',
+    members: 'member',
+    ships: 'ship',
+    locations: 'location'
+  };
+  return referencePaths[path];
 }
 
 export const collectionQueries: CollQuery = {
   exclude: '-_id -author -__v -edited',
   limit: 10,
   queries: {
-    characters: ['name', 'gender', 'race', 'origin', 'status', 'main_occupations'],
-    races: ['name'],
-    devil_fruits: ['name', 'type'],
-    haki_abilities: ['name'],
-    groups: [],
-    crews: [],
-    members: [],
-    ships: [],
-    locations: []
+    character: ['name', 'gender', 'race', 'origin', 'status', 'main_occupations'],
+    race: ['name'],
+    devil_fruit: ['name', 'type'],
+    haki_ability: ['name'],
+    group: [],
+    crew: [],
+    member: [],
+    ship: [],
+    location: []
   }
 };
 
