@@ -2,6 +2,7 @@ import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import express from 'express';
 import router from './routes';
+import { notFound, productionErrors } from '@handlers/errors';
 
 dotenv.config();
 
@@ -22,6 +23,9 @@ const db = process.env.NODE_ENV === 'development' ? process.env.MONGO_DB_DEV_URI
     res.send('One Piece API, Work in progress...');
   });
   app.use('/api', router);
+
+  app.use(notFound);
+  app.use(productionErrors);
 })().catch((error) => {
   console.log('Error while connecting to Database', error);
 });

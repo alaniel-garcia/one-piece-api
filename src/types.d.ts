@@ -3,7 +3,7 @@ import type { Request } from 'express';
 
 // API
 
-export interface ApiModels {
+export interface ApiModelsHandler {
   characters: CharacterModel;
   races: RaceModel;
   devil_fruits: DevilFruitModel;
@@ -14,6 +14,16 @@ export interface ApiModels {
   ships: ShipModel;
   locations: LocationModel;
 }
+export type ApiModel =
+  | CharacterModel
+  | RaceModel
+  | DevilFruitModel
+  | HakiAbilityModel
+  | GroupModel
+  | CrewModel
+  | MemberModel
+  | ShipModel
+  | LocationModel;
 
 export type ApiDocument =
   | BaseCharacter
@@ -29,13 +39,16 @@ export type ApiDocument =
 type HandlerType = 'find' | 'findById';
 
 type EndpointHandler = {
-  [key in HandlerType]: Array<(req, res, next) => Promise<void> | void>;
+  [key in HandlerType]: Array<(req, res, next) => Promise<void> | Response<any, Record<string, any>>>;
 };
 
 // Request and payload
 
 export interface CustomRequest<PayloadType = Payload> extends Request {
   payload: PayloadType;
+  params: {
+    id: string | Array<string | number>;
+  };
 }
 
 export interface RawPayload {
