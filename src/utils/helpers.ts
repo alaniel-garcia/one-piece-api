@@ -63,7 +63,7 @@ export const collectionQueries: CollQuery = {
   }
 };
 
-export const message = {
+export const message: Record<string, string> = {
   noPage: 'Requested page does not exist.',
   noCharacter: 'Character not found',
   noRace: 'Race not found',
@@ -73,5 +73,7 @@ export const message = {
   noCrew: 'Crew not found',
   noMember: 'Member not found',
   noShip: 'Ship not found',
-  noLocation: 'Location not found'
+  noLocation: 'Location not found',
+  badParam: 'You must provide an id',
+  badArray: 'Bad array provided'
 };

@@ -7,9 +7,9 @@ import Crew from './Crew';
 import Member from './Member';
 import Ship from './Ship';
 import Location from './Location';
-import type { ApiModels } from 'types';
+import type { ApiModelsHandler } from 'types';
 
-const models: ApiModels = {
+const models: ApiModelsHandler = {
   characters: Character,
   races: Race,
   devil_fruits: Devil_fruit,
