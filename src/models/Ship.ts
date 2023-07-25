@@ -40,12 +40,13 @@ shipSchema.statics.structure = (res) => {
     created,
     last_updated
   }: ShipDocument): BaseShip => ({
+    // Besides order structure, it sets empty(null/undefined) not required properties to explicitly null
     id,
     name,
     description,
     ownership,
-    flag,
-    image,
+    flag: flag ?? null,
+    image: image ?? null,
     url,
     created,
     last_updated

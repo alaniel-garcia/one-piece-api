@@ -19,11 +19,12 @@ const raceSchema = new Schema<RaceDocument, RaceModel>(
 
 raceSchema.statics.structure = (res) => {
   const sortSchema = ({ id, name, homeland, about, image, url, created, last_updated }: RaceDocument): BaseRace => ({
+    // Besides order structure, it sets empty(null/undefined) not required properties to explicitly null
     id,
     name,
     homeland,
     about,
-    image,
+    image: image ?? null,
     url,
     created,
     last_updated

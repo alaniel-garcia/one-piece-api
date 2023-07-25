@@ -2,11 +2,11 @@
 import { collectionQueries, message } from '@utils/helpers';
 import models from '@models/index';
 import type { NextFunction, Response } from 'express';
-import type { ApiModelsHandler, CharacterModel, CustomRequest } from 'types';
+import type { ApiModelsHandler, CharacterModel, CustomRequest, GetByIdData } from 'types';
 import { catchErrors } from './errors';
 
 interface CustomResponse {
-  data: any;
+  data: GetByIdData | null;
   error: {
     message: string;
     status: number;
@@ -14,7 +14,7 @@ interface CustomResponse {
 }
 
 interface CustomResponseParams {
-  data?: any;
+  data?: GetByIdData;
   status?: number;
   message?: string;
 }
@@ -95,7 +95,7 @@ async function getById(
     return res.status(error.status).json({ error: error.message });
   }
 
-  req.payload = data;
+  req.payload = data!;
   next();
 }
 

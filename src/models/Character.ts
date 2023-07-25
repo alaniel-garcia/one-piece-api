@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 import type { BaseCharacter, CharacterDocument, CharacterModel } from 'types';
-import { collectionQueries } from '@utils/helpers';
+import { collectionQueries, emptyArrayToNull } from '@utils/helpers';
 
 const { Schema } = mongoose;
 
@@ -86,21 +86,22 @@ characterSchema.statics.structure = (res) => {
     created,
     last_updated
   }: CharacterDocument): BaseCharacter => ({
+    // Besides order structure, it sets empty(null/undefined) not required properties to explicitly null
     id,
     name,
     gender,
     race,
     origin,
     status,
-    birthday,
-    main_occupations,
-    devil_fruit,
-    haki_abilities,
-    bounties,
-    height,
+    birthday: birthday ?? null,
+    main_occupations: emptyArrayToNull(main_occupations),
+    devil_fruit: devil_fruit ?? null,
+    haki_abilities: emptyArrayToNull(haki_abilities),
+    bounties: emptyArrayToNull(bounties),
+    height: height ?? null,
     debut,
     backstory,
-    image,
+    image: image ?? null,
     url,
     created,
     last_updated

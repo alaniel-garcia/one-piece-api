@@ -54,7 +54,7 @@ export interface CustomRequest<PayloadType = Payload> extends Request {
 export interface RawPayload {
   page: number;
   count: number;
-  results: Array<any>;
+  results: Array<ApiDocument>;
 }
 
 export interface ProcessedPayload {
@@ -65,10 +65,12 @@ export interface ProcessedPayload {
     next: string;
     prev: string;
   };
-  results: Array<any>;
+  results: Array<ApiDocument>;
 }
 
-type Payload = RawPayload | ProcessedPayload;
+export type GetByIdData = Array<ApiDocument> | ApiDocument;
+
+type Payload = RawPayload | ProcessedPayload | GetByIdData;
 
 // Subdocs and enums
 
@@ -109,15 +111,15 @@ export interface BaseCharacter {
   race: Race;
   origin: string;
   status: Status;
-  birthday?: string;
-  main_occupations?: Array<string>;
-  devil_fruit?: LuffyDevilFruitSubDoc | SubDocument | Array<SubDocument>;
-  haki_abilities?: Array<HakiAbilities>;
-  bounties?: Array<string>;
-  height?: string;
+  birthday?: string | null;
+  main_occupations?: Array<string> | null;
+  devil_fruit?: LuffyDevilFruitSubDoc | SubDocument | Array<SubDocument> | null;
+  haki_abilities?: Array<HakiAbilities> | null;
+  bounties?: Array<string> | null;
+  height?: string | null;
   debut: Array<string>;
   backstory: string;
-  image?: string;
+  image?: string | null;
   url: string;
   created: string;
   last_updated: string;
@@ -137,7 +139,7 @@ export interface BaseRace {
   name: string;
   homeland: string;
   about: string;
-  image?: string;
+  image?: string | null;
   url: string;
   created: string;
   last_updated: string;
@@ -159,7 +161,7 @@ export interface BaseDevilFruit {
   meaning: string;
   description: string;
   current_user: SubDocument;
-  image?: string;
+  image?: string | null;
   url: string;
   created: string;
   last_updated: string;
@@ -199,7 +201,7 @@ export interface BaseGroup {
   name: string;
   members: Array<SubDocument>;
   background: string;
-  image?: string;
+  image?: string | null;
   url: string;
   created: string;
   last_updated: string;
@@ -218,11 +220,11 @@ export interface BaseCrew {
   id: number;
   name: string;
   captain: SubDocument;
-  flag?: string;
+  flag?: string | null;
   main_ship?: SubDocument;
   members: Array<SubDocument>;
   background: string;
-  image?: string;
+  image?: string | null;
   url: string;
   created: string;
   last_updated: string;
@@ -239,7 +241,7 @@ export interface CrewModel extends Model<CrewDocument> {
 
 export interface BaseMember {
   id: number;
-  character: SubDocument & { image?: string };
+  character: SubDocument & { image?: string | null };
   membership: Membership;
   rol: string;
   status: string;
@@ -263,8 +265,8 @@ export interface BaseShip {
   name: string;
   description: string;
   ownership: Ownership;
-  flag?: string;
-  image?: string;
+  flag?: string | null;
+  image?: string | null;
   url: string;
   created: string;
   last_updated: string;
@@ -284,8 +286,8 @@ export interface BaseLocation {
   name: string;
   type: string;
   description: string;
-  population?: string;
-  government?: string;
+  population?: string | null;
+  government?: string | null;
   history: string;
   image: string;
   url: string;

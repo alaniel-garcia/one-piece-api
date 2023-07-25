@@ -48,17 +48,23 @@ memberSchema.statics.structure = (res) => {
     url,
     created,
     last_updated
-  }: MemberDocument): BaseMember => ({
-    id,
-    character,
-    membership,
-    rol,
-    status,
-    details,
-    url,
-    created,
-    last_updated
-  });
+  }: MemberDocument): BaseMember => {
+    // Besides order structure, it sets empty(null/undefined) not required properties to explicitly null
+
+    character.image ??= null;
+
+    return {
+      id,
+      character,
+      membership,
+      rol,
+      status,
+      details,
+      url,
+      created,
+      last_updated
+    };
+  };
 
   memberSchema.statics.findAndCount = async () => {
     // implement code after

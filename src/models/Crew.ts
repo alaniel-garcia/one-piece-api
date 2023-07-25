@@ -56,14 +56,15 @@ crewSchema.statics.structure = (res) => {
     created,
     last_updated
   }: CrewDocument): BaseCrew => ({
+    // Besides order structure, it sets empty(null/undefined) not required properties to explicitly null
     id,
     name,
     captain,
-    flag,
+    flag: flag ?? null,
     main_ship,
     members,
     background,
-    image,
+    image: image ?? null,
     url,
     created,
     last_updated

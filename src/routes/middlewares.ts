@@ -50,7 +50,7 @@ function generatePageUrls(req: CustomRequest, res: Response, next: NextFunction)
   let results: Array<ApiDocument>;
 
   // ended up narrowing payload types in order to use RawPayload first and then ProcessedPayload
-  if (!('info' in req.payload)) {
+  if (!('info' in req.payload) && 'results' in req.payload) {
     page = typeof req.payload.page === 'string' ? parseInt(req.payload.page) : req.payload.page;
     count = req.payload.count;
     results = req.payload.results;

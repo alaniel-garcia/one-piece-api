@@ -42,13 +42,14 @@ devilFruitSchema.statics.structure = (res) => {
     created,
     last_updated
   }: DevilFruitDocument): BaseDevilFruit => ({
+    // Besides order structure, it sets empty(null/undefined) not required properties to explicitly null
     id,
     name,
     type,
     meaning,
     description,
     current_user,
-    image,
+    image: image ?? null,
     url,
     created,
     last_updated

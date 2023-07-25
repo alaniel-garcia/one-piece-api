@@ -34,12 +34,13 @@ locationSchema.statics.structure = (res) => {
     created,
     last_updated
   }: LocationDocument): BaseLocation => ({
+    // Besides order structure, it sets empty(null/undefined) not required properties to explicitly null
     id,
     name,
     type,
     description,
-    population,
-    government,
+    population: population ?? null,
+    government: government ?? null,
     history,
     image,
     url,

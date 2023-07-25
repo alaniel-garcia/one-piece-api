@@ -37,11 +37,12 @@ groupSchema.statics.structure = (res) => {
     created,
     last_updated
   }: GroupDocument): BaseGroup => ({
+    // Besides order structure, it sets empty(null/undefined) not required properties to explicitly null
     id,
     name,
     members,
     background,
-    image,
+    image: image ?? null,
     url,
     created,
     last_updated

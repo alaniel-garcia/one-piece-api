@@ -47,6 +47,11 @@ export function turnPathIntoModel(path: string): string {
   return referencePaths[path];
 }
 
+// Used in structure static method for schemas. It set prop to any type in order to not assert the value every time this gets called
+export function emptyArrayToNull<T>(prop: any): Array<T> | null {
+  return (prop as Array<T>).length > 0 ? prop : null;
+}
+
 export const collectionQueries: CollQuery = {
   exclude: '-_id -author -__v -edited',
   limit: 10,
