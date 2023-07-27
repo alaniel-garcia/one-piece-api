@@ -1,4 +1,4 @@
-import type { Document, Model } from 'mongoose';
+import type { Document, Model, Schema } from 'mongoose';
 import type { Request } from 'express';
 
 // API
@@ -80,6 +80,8 @@ export interface SubDocument {
   url: string;
 }
 
+export type NewSubDocument = number | Schema.Types.ObjectId;
+
 export interface Membership extends SubDocument {
   type: 'Crew' | 'Group';
 }
@@ -96,8 +98,10 @@ export interface LuffyDevilFruitSubDoc extends SubDocument {
   alias: 'Gomu Gomu no Mi';
 }
 
-export type Race = SubDocument;
+// export type Race = SubDocument;
+export type Race = NewSubDocument;
 export type HakiAbility = SubDocument & { name: HakiAbilityName };
+// export type HakiAbility = SubDocument;
 export type Status = 'Alive' | 'Deceased' | 'Unknown';
 export type HakiAbilityName = 'Armament' | 'Observation' | 'Conqueror';
 export type DevilFruitType = 'Paramecia' | 'Logia' | 'Zoan' | 'Mythical Zoan';
@@ -113,7 +117,8 @@ export interface BaseCharacter {
   status: Status;
   birthday?: string | null;
   main_occupations?: Array<string> | null;
-  devil_fruit?: LuffyDevilFruitSubDoc | SubDocument | Array<SubDocument> | null;
+  // devil_fruit?: LuffyDevilFruitSubDoc | SubDocument | Array<SubDocument> | null;
+  devil_fruit?: Schema.Types.ObjectId | Array<Schema.Types.ObjectId> | null;
   haki_abilities?: Array<HakiAbilities> | null;
   bounties?: Array<string> | null;
   height?: string | null;
@@ -157,10 +162,11 @@ export interface RaceModel extends Model<RaceDocument> {
 export interface BaseDevilFruit {
   id: number;
   name: string;
+  alias?: 'Gomu Gomu no Mi' | null;
   type: DevilFruitType;
   meaning: string;
   description: string;
-  current_user: SubDocument;
+  current_user: NewSubDocument;
   image?: string | null;
   url: string;
   created: string;

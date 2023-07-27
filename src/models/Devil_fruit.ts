@@ -33,6 +33,7 @@ devilFruitSchema.statics.structure = (res) => {
   const sortSchema = ({
     id,
     name,
+    alias,
     type,
     meaning,
     description,
@@ -45,6 +46,7 @@ devilFruitSchema.statics.structure = (res) => {
     // Besides order structure, it sets empty(null/undefined) not required properties to explicitly null
     id,
     name,
+    alias: alias ?? null,
     type,
     meaning,
     description,
