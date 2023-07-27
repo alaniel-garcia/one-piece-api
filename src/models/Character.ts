@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose, { type CallbackWithoutResultAndOptionalError } from 'mongoose';
 import type { BaseCharacter, CharacterDocument, CharacterModel } from 'types';
 import { collectionQueries, emptyArrayToNull } from '@utils/helpers';
 
@@ -25,12 +25,8 @@ const characterSchema: mongoose.Schema<CharacterDocument, CharacterModel> = new 
     name: String,
     gender: String,
     race: {
-      type: {
-        id: Number,
-        name: String,
-        url: String
-      },
-      _id: false
+      type: Schema.Types.ObjectId,
+      ref: 'Race'
     },
     origin: String,
     status: {
@@ -64,6 +60,16 @@ const characterSchema: mongoose.Schema<CharacterDocument, CharacterModel> = new 
   },
   { versionKey: false }
 );
+
+// As this fn will be used in pre hooks, need to take in count the type used for the next function
+function autopopulate(this: CharacterDocument, next: CallbackWithoutResultAndOptionalError): void {
+  void this.populate({ path: 'race', select: 'name url -_id' });
+  next();
+}
+
+characterSchema.pre('find', autopopulate);
+
+characterSchema.pre('findOne', autopopulate);
 
 characterSchema.statics.structure = (res) => {
   const sortSchema = ({
