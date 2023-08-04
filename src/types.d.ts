@@ -8,11 +8,11 @@ export interface ApiModelsHandler {
   races: RaceModel;
   devil_fruits: DevilFruitModel;
   haki_abilities: HakiAbilityModel;
-  groups: GroupModel;
-  crews: CrewModel;
-  members: MemberModel;
-  ships: ShipModel;
-  locations: LocationModel;
+  // groups: GroupModel;
+  // crews: CrewModel;
+  // members: MemberModel;
+  // ships: ShipModel;
+  // locations: LocationModel;
 }
 export type ApiModel =
   | CharacterModel
