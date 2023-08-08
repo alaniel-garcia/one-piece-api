@@ -6,18 +6,12 @@ const { Schema } = mongoose;
 const hakiAbilitySchema = new Schema<HakiAbilityDocument, HakiAbilityModel>(
   {
     id: Number,
-    name: String,
-    description: String,
-    users: {
-      type: [
-        {
-          id: Number,
-          name: String,
-          url: String
-        }
-      ],
-      _id: false
+    name: {
+      type: String,
+      enum: ['Armament', 'Observation', 'Conqueror']
     },
+    description: String,
+    users: [Schema.Types.ObjectId],
     image: String,
     url: String,
     created: String,

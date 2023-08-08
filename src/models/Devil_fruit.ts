@@ -7,20 +7,17 @@ const devilFruitSchema = new Schema<DevilFruitDocument, DevilFruitModel>(
   {
     id: Number,
     name: String,
+    alias: {
+      $type: String,
+      enum: ['Gomu Gomu no Mi']
+    },
     type: {
       $type: String,
       enum: ['Paramecia', 'Logia', 'Zoan', 'Mythical Zoan']
     },
     meaning: String,
     description: String,
-    current_user: {
-      $type: {
-        id: Number,
-        name: String,
-        url: String
-      },
-      _id: false
-    },
+    current_user: Schema.Types.ObjectId,
     image: String,
     url: String,
     created: String,
@@ -50,7 +47,7 @@ devilFruitSchema.statics.structure = (res) => {
     type,
     meaning,
     description,
-    current_user,
+    current_user: current_user ?? null,
     image: image ?? null,
     url,
     created,

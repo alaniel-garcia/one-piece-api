@@ -74,34 +74,6 @@ type Payload = RawPayload | ProcessedPayload | GetByIdData;
 
 // Subdocs and enums
 
-export interface SubDocument {
-  id: number;
-  name: string;
-  url: string;
-}
-
-export type NewSubDocument = number | Schema.Types.ObjectId;
-
-export interface Membership extends SubDocument {
-  type: 'Crew' | 'Group';
-}
-
-export interface Ownership {
-  id?: number;
-  type: string;
-  name?: string;
-}
-
-export interface LuffyDevilFruitSubDoc extends SubDocument {
-  id: 1;
-  name: 'Hito Hito no Mi, Model: Nika';
-  alias: 'Gomu Gomu no Mi';
-}
-
-// export type Race = SubDocument;
-export type Race = NewSubDocument;
-export type HakiAbility = SubDocument & { name: HakiAbilityName };
-// export type HakiAbility = SubDocument;
 export type Status = 'Alive' | 'Deceased' | 'Unknown';
 export type HakiAbilityName = 'Armament' | 'Observation' | 'Conqueror';
 export type DevilFruitType = 'Paramecia' | 'Logia' | 'Zoan' | 'Mythical Zoan';
@@ -112,14 +84,13 @@ export interface BaseCharacter {
   id: number;
   name: string;
   gender: string;
-  race: Race;
+  race: Schema.Types.ObjectId;
   origin: string;
   status: Status;
   birthday?: string | null;
   main_occupations?: Array<string> | null;
-  // devil_fruit?: LuffyDevilFruitSubDoc | SubDocument | Array<SubDocument> | null;
   devil_fruit?: Schema.Types.ObjectId | Array<Schema.Types.ObjectId> | null;
-  haki_abilities?: Array<HakiAbilities> | null;
+  haki_abilities?: Array<Schema.Types.ObjectId> | null;
   bounties?: Array<string> | null;
   height?: string | null;
   debut: Array<string>;
@@ -166,7 +137,7 @@ export interface BaseDevilFruit {
   type: DevilFruitType;
   meaning: string;
   description: string;
-  current_user: NewSubDocument;
+  current_user?: Schema.Types.ObjectId | null;
   image?: string | null;
   url: string;
   created: string;
@@ -184,9 +155,9 @@ export interface DevilFruitModel extends Model<DevilFruitDocument> {
 
 export interface BaseHakiAbility {
   id: number;
-  name: string;
+  name: HakiAbilityName;
   description: string;
-  users: Array<SubDocument>;
+  users: Array<Schema.Types.ObjectId>;
   image: string;
   url: string;
   created: string;
@@ -205,7 +176,7 @@ export interface HakiAbilityModel extends Model<HakiAbilityDocument> {
 export interface BaseGroup {
   id: number;
   name: string;
-  members: Array<SubDocument>;
+  members: Array<Schema.Types.ObjectId>;
   background: string;
   image?: string | null;
   url: string;
@@ -225,10 +196,10 @@ export interface GroupModel extends Model<GroupDocument> {
 export interface BaseCrew {
   id: number;
   name: string;
-  captain: SubDocument;
+  captain: Schema.Types.ObjectId;
   flag?: string | null;
-  main_ship?: SubDocument;
-  members: Array<SubDocument>;
+  main_ship?: Schema.Types.ObjectId | null;
+  members: Array<Schema.Types.ObjectId>;
   background: string;
   image?: string | null;
   url: string;
@@ -247,8 +218,9 @@ export interface CrewModel extends Model<CrewDocument> {
 
 export interface BaseMember {
   id: number;
-  character: SubDocument & { image?: string | null };
-  membership: Membership;
+  character: Schema.Types.ObjectId;
+  membership_type: 'Crew' | 'Group';
+  membership: Schema.Types.ObjectId;
   rol: string;
   status: string;
   details: string;
@@ -270,7 +242,8 @@ export interface BaseShip {
   id: number;
   name: string;
   description: string;
-  ownership: Ownership;
+  ownership_type: 'Crew' | 'Group';
+  ownership: Schema.Types.ObjectId;
   flag?: string | null;
   image?: string | null;
   url: string;

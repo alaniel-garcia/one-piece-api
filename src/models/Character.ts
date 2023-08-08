@@ -35,7 +35,10 @@ const characterSchema: mongoose.Schema<CharacterDocument, CharacterModel> = new 
     },
     birthday: String,
     main_occupations: [String],
-    devil_fruit: Schema.Types.Mixed,
+    devil_fruit: {
+      type: Schema.Types.Mixed,
+      ref: 'Devil_fruit'
+    },
     haki_abilities: {
       type: [Schema.Types.ObjectId],
       ref: 'Haki_ability'
@@ -55,8 +58,8 @@ const characterSchema: mongoose.Schema<CharacterDocument, CharacterModel> = new 
 // As this fn will be used in pre hooks, need to take in count the type used for the next function
 function autopopulate(this: CharacterDocument, next: CallbackWithoutResultAndOptionalError): void {
   void this.populate({ path: 'race', select: 'name url -_id' });
-  void this.populate({ path: 'devil_fruit', model: 'Devil_fruit', select: 'name alias url -_id' });
-  void this.populate({ path: 'haki_abilities', model: 'Haki_ability', select: 'name url -_id' });
+  void this.populate({ path: 'devil_fruit', select: 'name alias url -_id' });
+  void this.populate({ path: 'haki_abilities', select: 'name url -_id' });
   next();
 }
 
