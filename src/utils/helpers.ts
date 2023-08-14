@@ -54,7 +54,11 @@ export function emptyArrayToNull<T>(prop: any): Array<T> | null {
   return (prop as Array<T>).length > 0 ? prop : null;
 }
 
-export function getPopulationSettings(modelName: string): mongoose.PopulateOptions | Array<mongoose.PopulateOptions> {
+export function getPopulationSettings(
+  modelName: string
+): mongoose.PopulateOptions | Array<mongoose.PopulateOptions> | false {
+  // this function returns false for those models that not require population so the process can be skipped
+
   if (modelName === 'Character') {
     return [
       { path: 'race haki_abilities', select: 'name url -_id' },
@@ -65,6 +69,8 @@ export function getPopulationSettings(modelName: string): mongoose.PopulateOptio
   if (modelName === 'Devil_fruit') {
     return { path: 'current_user', select: 'name url image -_id' };
   }
+
+  if (modelName === 'Race') return false;
 
   throw new Error('Invalid model name');
 }
