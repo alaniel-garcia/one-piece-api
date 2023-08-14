@@ -14,27 +14,19 @@ export interface ApiModelsHandler {
   // ships: ShipModel;
   // locations: LocationModel;
 }
-export type ApiModel =
-  | CharacterModel
-  | RaceModel
-  | DevilFruitModel
-  | HakiAbilityModel
-  | GroupModel
-  | CrewModel
-  | MemberModel
-  | ShipModel
-  | LocationModel;
+export type ApiModel = CharacterModel | RaceModel | DevilFruitModel | HakiAbilityModel;
+// | GroupModel
+// | CrewModel
+// | MemberModel
+// | ShipModel
+// | LocationModel;
 
-export type ApiDocument =
-  | BaseCharacter
-  | BaseRace
-  | BaseDevilFruit
-  | BaseHakiAbility
-  | BaseGroup
-  | BaseCrew
-  | BaseMember
-  | BaseShip
-  | BaseLocation;
+export type ApiDocument = BaseCharacter | BaseRace | BaseDevilFruit | BaseHakiAbility;
+// | BaseGroup
+// | BaseCrew
+// | BaseMember
+// | BaseShip
+// | BaseLocation;
 
 type HandlerType = 'find' | 'findById';
 
