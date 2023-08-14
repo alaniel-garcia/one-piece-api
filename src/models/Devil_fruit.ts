@@ -1,7 +1,14 @@
+import { collectionQueries, getPopulationSettings } from '@utils/helpers';
 import mongoose from 'mongoose';
 import type { BaseDevilFruit, DevilFruitDocument, DevilFruitModel } from 'types';
 
 const { Schema } = mongoose;
+
+interface DevilFruitQuery {
+  name?: string | RegExp;
+  type?: string | RegExp;
+  skip?: number;
+}
 
 const devilFruitSchema = new Schema<DevilFruitDocument, DevilFruitModel>(
   {
@@ -17,7 +24,10 @@ const devilFruitSchema = new Schema<DevilFruitDocument, DevilFruitModel>(
     },
     meaning: String,
     description: String,
-    current_user: Schema.Types.ObjectId,
+    current_user: {
+      $type: Schema.Types.ObjectId,
+      ref: 'Character'
+    },
     image: String,
     url: String,
     created: String,
@@ -43,7 +53,7 @@ devilFruitSchema.statics.structure = (res) => {
     // Besides order structure, it sets empty(null/undefined) not required properties to explicitly null
     id,
     name,
-    alias: alias ?? null,
+    alias: alias ?? undefined, // we set alias as undefined due to null values are shown in the client response and we want only Hito Hito no Mi, Model: Nika to show the alias field
     type,
     meaning,
     description,
@@ -57,11 +67,26 @@ devilFruitSchema.statics.structure = (res) => {
   return Array.isArray(res) ? res.map(sortSchema) : sortSchema(res);
 };
 
-devilFruitSchema.statics.findAndCount = async () => {
-  // implement code after
+devilFruitSchema.statics.findAndCount = async function ({ name, type, skip }) {
+  const regex = (key: string): RegExp =>
+    new RegExp(/^zoan/i.test(key) ? `^${key}` : key.replace(/[^\w\s]/g, '\\$&'), 'i');
 
-  const results = '';
-  const count = 0;
+  const query: DevilFruitQuery = {};
+
+  if (name != null) query.name = regex(name);
+  if (type != null) query.type = regex(type);
+
+  const [data, count] = await Promise.all([
+    this.find(query)
+      .sort({ id: 1 })
+      .select(collectionQueries.exclude)
+      .limit(collectionQueries.limit)
+      .skip(skip)
+      .populate(getPopulationSettings(this.modelName)),
+    this.find(query).countDocuments()
+  ]);
+
+  const results = this.structure(data);
 
   return { results, count };
 };

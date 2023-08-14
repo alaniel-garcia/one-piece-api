@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-invalid-void-type */
-import { collectionQueries, message } from '@utils/helpers';
+import { collectionQueries, getPopulationSettings, message } from '@utils/helpers';
 import models from '@models/index';
 import type { NextFunction, Response } from 'express';
 import type { ApiModelsHandler, CharacterModel, CustomRequest, GetByIdData } from 'types';
@@ -37,12 +37,18 @@ const buildResponse = ({ data, status, message }: CustomResponseParams): CustomR
 };
 async function queryById(name: string, id: string | Array<string | number>): Promise<CustomResponse> {
   const Model = models[name as keyof ApiModelsHandler] as CharacterModel;
+  // it's precise to understand than even though this const model can be any other model we have developed, it is asserted as Character model,
+  // since otherwise if we let it as an ApiModel type, it would require a complete refactor of Api models flow in order to give
+  // typescript a good understanding on types, based on this complex scenario where we deal with union types
+
   // If the param is an array
   if (Array.isArray(id)) {
     try {
       const data = await Model.find({
         id: { $in: id }
-      }).select(collectionQueries.exclude);
+      })
+        .select(collectionQueries.exclude)
+        .populate(getPopulationSettings(Model.modelName));
       return buildResponse({ data: Model.structure(data) });
     } catch (error) {
       const err = error as Error;
@@ -55,7 +61,9 @@ async function queryById(name: string, id: string | Array<string | number>): Pro
     return buildResponse({ status: 500, message: message.badParam });
   }
 
-  const data = await Model.findOne({ id }).select(collectionQueries.exclude);
+  const data = await Model.findOne({ id })
+    .select(collectionQueries.exclude)
+    .populate(getPopulationSettings(Model.modelName));
 
   if (data == null) {
     return buildResponse({ status: 404, message: message[`no${Model.modelName}`] });

@@ -1,6 +1,6 @@
-import mongoose, { type CallbackWithoutResultAndOptionalError } from 'mongoose';
+import mongoose from 'mongoose';
 import type { BaseCharacter, CharacterDocument, CharacterModel } from 'types';
-import { collectionQueries, emptyArrayToNull } from '@utils/helpers';
+import { collectionQueries, emptyArrayToNull, getPopulationSettings } from '@utils/helpers';
 
 const { Schema } = mongoose;
 
@@ -49,20 +49,8 @@ const characterSchema: mongoose.Schema<CharacterDocument, CharacterModel> = new 
     created: String,
     last_updated: String
   },
-  { versionKey: false }
+  { versionKey: false, toJSON: { virtuals: true }, toObject: { virtuals: true } }
 );
-
-// As this fn will be used in pre hooks, need to take in count the type used for the next function
-function autopopulate(this: CharacterDocument, next: CallbackWithoutResultAndOptionalError): void {
-  void this.populate({ path: 'race', select: 'name url -_id' });
-  void this.populate({ path: 'devil_fruit', model: 'Devil_fruit', select: 'name alias url -_id' }); // model set in pupulate method in order to retrieve all devil fruits for array(blackbeard)
-  void this.populate({ path: 'haki_abilities', select: 'name url -_id' });
-  next();
-}
-
-characterSchema.pre('find', autopopulate);
-
-characterSchema.pre('findOne', autopopulate);
 
 characterSchema.statics.structure = (res) => {
   const sortSchema = ({
@@ -115,20 +103,25 @@ characterSchema.statics.findAndCount = async function ({ name, gender, race, ori
 
   const query: CharacterQuery = {};
 
-  if (name !== undefined) query.name = regex(name);
-  if (gender !== undefined) query.gender = regex(gender);
-  if (race !== undefined) {
+  if (name != null) query.name = regex(name);
+  if (gender != null) query.gender = regex(gender);
+  if (race != null) {
     query['race.name'] = regex(race);
   }
-  if (origin !== undefined) query.origin = regex(origin);
-  if (status !== undefined) query.status = regex(status);
-  if (main_occupations !== undefined) {
+  if (origin != null) query.origin = regex(origin);
+  if (status != null) query.status = regex(status);
+  if (main_occupations != null) {
     const occupationsArray = (main_occupations as string).split(',');
     query.main_occupations = { $all: occupationsArray.map((occ) => regex(occ)) }; // filter by ocuppation in the array
   }
 
   const [data, count] = await Promise.all([
-    this.find(query).sort({ _id: 1 }).select(collectionQueries.exclude).limit(collectionQueries.limit).skip(skip),
+    this.find(query)
+      .sort({ id: 1 })
+      .select(collectionQueries.exclude)
+      .limit(collectionQueries.limit)
+      .skip(skip)
+      .populate(getPopulationSettings(this.modelName)),
     this.find(query).countDocuments()
   ]);
 

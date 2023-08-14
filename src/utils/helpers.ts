@@ -1,3 +1,5 @@
+import type mongoose from 'mongoose';
+
 export const BASE_URL =
   process.env.NODE_ENV === 'production' ? 'https://www.onepieceapi.net/api' : `http://localhost:5000/api`;
 
@@ -52,6 +54,21 @@ export function emptyArrayToNull<T>(prop: any): Array<T> | null {
   return (prop as Array<T>).length > 0 ? prop : null;
 }
 
+export function getPopulationSettings(modelName: string): mongoose.PopulateOptions | Array<mongoose.PopulateOptions> {
+  if (modelName === 'Character') {
+    return [
+      { path: 'race haki_abilities', select: 'name url -_id' },
+      { path: 'devil_fruit', model: 'Devil_fruit', select: 'name alias url -_id' }
+    ];
+  }
+
+  if (modelName === 'Devil_fruit') {
+    return { path: 'current_user', select: 'name url image -_id' };
+  }
+
+  throw new Error('Invalid model name');
+}
+
 export const collectionQueries: CollQuery = {
   exclude: '-_id -author -__v -edited',
   limit: 10,
@@ -72,8 +89,8 @@ export const message: Record<string, string> = {
   noPage: 'Requested page does not exist.',
   noCharacter: 'Character not found',
   noRace: 'Race not found',
-  noDevilFruit: 'Devil Fruit not found',
-  noHakiAbility: 'Haki Ability not found',
+  noDevil_fruit: 'Devil Fruit not found',
+  noHaki_ability: 'Haki Ability not found',
   noGroup: 'Group not found',
   noCrew: 'Crew not found',
   noMember: 'Member not found',
