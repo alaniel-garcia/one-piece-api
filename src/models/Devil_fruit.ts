@@ -76,13 +76,15 @@ devilFruitSchema.statics.findAndCount = async function ({ name, type, skip }) {
   if (name != null) query.name = regex(name);
   if (type != null) query.type = regex(type);
 
+  const populationSettings = getPopulationSettings(this.modelName) as mongoose.PopulateOptions; // asserts settings as PopulationOptions so when false value, this can be passed to populate method and skip the method when no need to populate
+
   const [data, count] = await Promise.all([
     this.find(query)
       .sort({ id: 1 })
       .select(collectionQueries.exclude)
       .limit(collectionQueries.limit)
       .skip(skip)
-      .populate(getPopulationSettings(this.modelName)),
+      .populate(populationSettings),
     this.find(query).countDocuments()
   ]);
 

@@ -115,13 +115,15 @@ characterSchema.statics.findAndCount = async function ({ name, gender, race, ori
     query.main_occupations = { $all: occupationsArray.map((occ) => regex(occ)) }; // filter by ocuppation in the array
   }
 
+  const populationSettings = getPopulationSettings(this.modelName) as mongoose.PopulateOptions; // asserts settings as PopulationOptions so when false value, this can be passed to populate method and skip the method when no need to populate
+
   const [data, count] = await Promise.all([
     this.find(query)
       .sort({ id: 1 })
       .select(collectionQueries.exclude)
       .limit(collectionQueries.limit)
       .skip(skip)
-      .populate(getPopulationSettings(this.modelName)),
+      .populate(populationSettings),
     this.find(query).countDocuments()
   ]);
 

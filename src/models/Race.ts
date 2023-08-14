@@ -1,7 +1,13 @@
+import { collectionQueries } from '@utils/helpers';
 import mongoose from 'mongoose';
 import type { BaseRace, RaceDocument, RaceModel } from 'types';
 
 const { Schema } = mongoose;
+
+interface RaceQuery {
+  name?: string | RegExp;
+  skip?: number;
+}
 
 const raceSchema = new Schema<RaceDocument, RaceModel>(
   {
@@ -33,11 +39,19 @@ raceSchema.statics.structure = (res) => {
   return Array.isArray(res) ? res.map(sortSchema) : sortSchema(res);
 };
 
-raceSchema.statics.findAndCount = async () => {
-  // implement code after
+raceSchema.statics.findAndCount = async function ({ name, skip }) {
+  const regex = (key: string): RegExp => new RegExp(key.replace(/[^\w\s]/g, '\\$&'), 'i');
 
-  const results = '';
-  const count = 0;
+  const query: RaceQuery = {};
+
+  if (name != null) query.name = regex(name);
+
+  const [data, count] = await Promise.all([
+    this.find(query).sort({ id: 1 }).select(collectionQueries.exclude).limit(collectionQueries.limit).skip(skip),
+    this.find(query).countDocuments()
+  ]);
+
+  const results = this.structure(data);
 
   return { results, count };
 };

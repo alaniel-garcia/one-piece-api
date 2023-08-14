@@ -4,6 +4,7 @@ import models from '@models/index';
 import type { NextFunction, Response } from 'express';
 import type { ApiModelsHandler, CharacterModel, CustomRequest, GetByIdData } from 'types';
 import { catchErrors } from './errors';
+import type mongoose from 'mongoose';
 
 interface CustomResponse {
   data: GetByIdData | null;
@@ -41,6 +42,8 @@ async function queryById(name: string, id: string | Array<string | number>): Pro
   // since otherwise if we let it as an ApiModel type, it would require a complete refactor of Api models flow in order to give
   // typescript a good understanding on types, based on this complex scenario where we deal with union types
 
+  const populationSettings = getPopulationSettings(Model.modelName) as mongoose.PopulateOptions; // asserts settings as PopulationOptions so when false value, this can be passed to populate method and skip the method when no need to populate
+
   // If the param is an array
   if (Array.isArray(id)) {
     try {
@@ -48,7 +51,7 @@ async function queryById(name: string, id: string | Array<string | number>): Pro
         id: { $in: id }
       })
         .select(collectionQueries.exclude)
-        .populate(getPopulationSettings(Model.modelName));
+        .populate(populationSettings);
       return buildResponse({ data: Model.structure(data) });
     } catch (error) {
       const err = error as Error;
@@ -61,9 +64,7 @@ async function queryById(name: string, id: string | Array<string | number>): Pro
     return buildResponse({ status: 500, message: message.badParam });
   }
 
-  const data = await Model.findOne({ id })
-    .select(collectionQueries.exclude)
-    .populate(getPopulationSettings(Model.modelName));
+  const data = await Model.findOne({ id }).select(collectionQueries.exclude).populate(populationSettings);
 
   if (data == null) {
     return buildResponse({ status: 404, message: message[`no${Model.modelName}`] });
