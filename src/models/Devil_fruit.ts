@@ -5,6 +5,10 @@ import type { BaseDevilFruit, DevilFruitDocument, DevilFruitModel } from 'types'
 const { Schema } = mongoose;
 
 interface DevilFruitQuery {
+  $or?: Array<{
+    name?: string | RegExp;
+    alias?: string | RegExp;
+  }>;
   name?: string | RegExp;
   type?: string | RegExp;
   skip?: number;
@@ -73,7 +77,13 @@ devilFruitSchema.statics.findAndCount = async function ({ name, type, skip }) {
 
   const query: DevilFruitQuery = {};
 
-  if (name != null) query.name = regex(name);
+  if (name != null) {
+    if ((name as string).match(/[gomu]/i) != null) {
+      query.$or = [{ name: regex(name) }, { alias: regex(name) }];
+    } else {
+      query.name = regex(name);
+    }
+  }
   if (type != null) query.type = regex(type);
 
   const populationSettings = getPopulationSettings(this.modelName) as mongoose.PopulateOptions; // asserts settings as PopulationOptions so when false value, this can be passed to populate method and skip the method when no need to populate
