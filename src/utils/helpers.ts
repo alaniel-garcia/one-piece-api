@@ -66,11 +66,15 @@ export function getPopulationSettings(
     ];
   }
 
+  if (modelName === 'Race') return false;
+
   if (modelName === 'Devil_fruit') {
-    return { path: 'current_user', select: 'name url image -_id' };
+    return { path: 'current_user', select: 'name image url -_id' };
   }
 
-  if (modelName === 'Race') return false;
+  if (modelName === 'Haki_ability') {
+    return { path: 'users', select: 'name image url -_id' };
+  }
 
   throw new Error('Invalid model name');
 }
