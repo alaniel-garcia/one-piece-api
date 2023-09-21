@@ -11,7 +11,7 @@ dotenv.config();
 const db = process.env.NODE_ENV === 'development' ? process.env.MONGO_DB_DEV_URI : '';
 
 function serveStaticImages(endpoint: string): Handler {
-  return express.static(path.join(__dirname, 'images', endpoint));
+  return express.static(path.join(__dirname, 'public/images', endpoint));
 }
 
 (async () => {
