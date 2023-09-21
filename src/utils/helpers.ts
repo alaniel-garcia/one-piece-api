@@ -1,7 +1,6 @@
 import type mongoose from 'mongoose';
 
-export const BASE_URL =
-  process.env.NODE_ENV === 'production' ? 'https://www.onepieceapi.net/api' : `http://localhost:5000/api`;
+export const BASE_URL = process.env.DEMO_BASE_URL ?? `http://localhost:5000/api`;
 
 interface CollQuery {
   exclude: string;
