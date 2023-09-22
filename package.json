@@ -7,7 +7,7 @@
     "dev": "NODE_ENV=development ts-node-dev --respawn -r tsconfig-paths/register --ignore-watch node_modules src/index.ts",
     "start": "NODE_ENV=production node build/index.js",
     "build": "tsc && tsc-alias",
-    "build:copy": "tsc && tsc-alias && cpx 'src/public/**' 'dist/public'",
+    "build:copy": "tsc && tsc-alias && cpx 'src/public/**' 'build/public'",
     "test": "NODE_ENV=test NODE_OPTIONS=--experimental-vm-modules NODE_NO_WARNINGS=1 jest --verbose --detectOpenHandles",
     "test:watch": "npm run test -- --watch",
     "lint": "eslint src/",
