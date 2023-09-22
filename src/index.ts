@@ -10,7 +10,6 @@ import { notFound, productionErrors } from '@handlers/errors';
 dotenv.config();
 
 const db = process.env.MONGO_DB_PROD_ATLAS_URI ?? '';
-console.log(db);
 function serveStaticImages(endpoint: string): Handler {
   return express.static(path.join(__dirname, 'public/images', endpoint));
 }
