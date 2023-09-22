@@ -6,8 +6,8 @@ import type { ApiDocument, CustomRequest, EndpointHandler, ProcessedPayload } fr
 import type { NextFunction, Response } from 'express';
 import { BASE_URL, collectionQueries, message, turnPathIntoModel } from '@utils/helpers';
 import { type ValidationChain, query } from 'express-validator';
-// import fs from 'fs';
-// import path from 'path';
+import fs from 'fs';
+import path from 'path';
 
 const { getAll, getById } = operations;
 
@@ -118,42 +118,42 @@ function validateIdParams(
   next();
 }
 
-// function wrapLinksWithAnchorTags(input: string): string {
-//   // Define a regular expression pattern to match URLs
-//   const urlPattern = /(https?:\/\/[^\s,]+)/g;
+function wrapLinksWithAnchorTags(input: string): string {
+  // Define a regular expression pattern to match URLs
+  const urlPattern = /(https?:\/\/[^\s,]+)/g;
 
-//   // Replace URLs with anchor tags
-//   const result = input.replace(urlPattern, '<a href="$&" class="link" target="_blank">$&</a>');
+  // Replace URLs with anchor tags
+  const result = input.replace(urlPattern, '<a href="$&" class="link" target="_blank">$&</a>');
 
-//   // Define a class for keys (you can customize this class name)
-//   const keyClass = 'json-key';
+  // Define a class for keys (you can customize this class name)
+  const keyClass = 'json-key';
 
-//   // Replace JSON keys with keys having a specified class
-//   const formattedResult = result.replace(/"([\w\s]+)":/g, '" <span class="' + keyClass + '">$1 </span>":');
-//   return formattedResult;
-// }
+  // Replace JSON keys with keys having a specified class
+  const formattedResult = result.replace(/"([\w\s]+)":/g, '" <span class="' + keyClass + '">$1 </span>":');
+  return formattedResult;
+}
 
-// export function jsonToHTML(JSONData: object): string {
-//   try {
-//     const htmlPath = path.join(__dirname, '..', '/public/JSONViewer.html');
-//     const data = fs.readFileSync(htmlPath, 'utf-8');
+export function jsonToHTML(JSONData: object): string {
+  try {
+    const htmlPath = path.join(__dirname, '..', '/public/JSONViewer.html');
+    const data = fs.readFileSync(htmlPath, 'utf-8');
 
-//     // Inject JSON data into the template
-//     const modifiedHTML = data.replace(
-//       '<pre id="json-content"></pre>',
-//       `<pre>${wrapLinksWithAnchorTags(JSON.stringify(JSONData, null, 2))}</pre>`
-//       // `<pre>${JSON.stringify(JSONData, null, 2)}</pre>`
-//     );
+    // Inject JSON data into the template
+    const modifiedHTML = data.replace(
+      '<pre id="json-content"></pre>',
+      `<pre>${wrapLinksWithAnchorTags(JSON.stringify(JSONData, null, 2))}</pre>`
+      // `<pre>${JSON.stringify(JSONData, null, 2)}</pre>`
+    );
 
-//     return modifiedHTML;
-//   } catch (error) {
-//     throw new Error(error as string);
-//   }
-// }
+    return modifiedHTML;
+  } catch (error) {
+    throw new Error(error as string);
+  }
+}
 
 function sendResponse(req: CustomRequest<ProcessedPayload>, res: Response, _next: NextFunction): void {
-  // res.send(jsonToHTML(req.payload));
-  res.json(req.payload);
+  res.send(jsonToHTML(req.payload));
+  // res.json(req.payload);
 }
 
 export default (model: string): EndpointHandler => {
