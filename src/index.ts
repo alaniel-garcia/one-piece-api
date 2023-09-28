@@ -6,6 +6,7 @@ import express, { type Handler } from 'express';
 import path from 'path';
 import router from './routes';
 import { notFound, productionErrors } from '@handlers/errors';
+import cors from 'cors';
 
 dotenv.config();
 
@@ -39,6 +40,7 @@ app.get('/', (_req, res) => {
   res.redirect('/api');
 });
 app.use('/api', router);
+app.use(cors({ origin: '*' }));
 
 app.use(notFound);
 app.use(productionErrors);
