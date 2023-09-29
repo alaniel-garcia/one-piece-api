@@ -40,7 +40,7 @@ app.get('/', (_req, res) => {
   res.redirect('/api');
 });
 app.use('/api', router);
-app.use(cors({ origin: '*' }));
+app.use(cors({ origin: '*', methods: ['GET'] }));
 
 app.use(notFound);
 app.use(productionErrors);
