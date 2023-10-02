@@ -25,6 +25,7 @@ mongoose.connection.once('open', () => {
 
 const app = express();
 
+app.disable('x-powered-by');
 app.use(express.json());
 
 const PORT = process.env.PORT ?? 8080;
