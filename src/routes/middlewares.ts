@@ -152,8 +152,8 @@ export function jsonToHTML(JSONData: object): string {
 }
 
 function sendResponse(req: CustomRequest<ProcessedPayload>, res: Response, _next: NextFunction): void {
-  // res.send(jsonToHTML(req.payload));
-  res.json(req.payload);
+  res.send(jsonToHTML(req.payload));
+  // res.json(req.payload);
 }
 
 export default (model: string): EndpointHandler => {
